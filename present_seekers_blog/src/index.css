@@ -376,7 +376,7 @@
 
 .pop-blogs-card1 {
   width: 29em;
-  height: 38em;
+  height: 45em;
   border: 0.0625rem solid #ccc;
   border-radius: 0.5rem;
   overflow: hidden;
@@ -1038,7 +1038,7 @@
 }
 
 .card1 h1 {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.7rem;
     margin: 0 0 1rem 0;
     color: #2c3e50;
@@ -1046,7 +1046,7 @@
 }
 
 .card1 p {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-style: italic;
     text-align: left;
     margin: 0;
@@ -1068,7 +1068,7 @@
 
 .card-footer h3 {
     color: #e67e22;
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 0.9rem;
     font-weight: 600;
     margin: 0;
@@ -1133,7 +1133,7 @@
   font-size: 3rem;
   width: 90vw;
   font-weight: bolder;
-  font-family: 'Fraunces', serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   text-shadow:2px 2px 8px rgba(0,0,0,0.7) ;
 }
 
@@ -1144,7 +1144,7 @@
 
 
 .about-page {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
 .container {
@@ -1170,7 +1170,7 @@
 }
 
 .hero-content h1 {
-    font-family:  'Fraunces', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 3.5rem;
     font-weight: 600;
     margin-bottom: 1.8rem;
@@ -1252,7 +1252,7 @@
 }
 
 .section-label {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 0.9rem;
     font-weight: 600;
     color: #e67e22;
@@ -1263,7 +1263,7 @@
 }
 
 .story-content h2 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 3rem;
     font-weight: 700;
     color: #2c3e50;
@@ -1288,7 +1288,7 @@
 }
 
 .story-text p {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.1rem;
     line-height: 1.8;
     color: #5a6c7d;
@@ -1307,7 +1307,7 @@
 }
 
 .stat-number {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 2rem;
     font-weight: 700;
     color: #e67e22;
@@ -1316,7 +1316,7 @@
 }
 
 .stat-label {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 0.9rem;
     color: #6c757d;
     font-weight: 500;
@@ -1433,7 +1433,7 @@
 }
 
 .section-subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.2rem;
     color: #6b7280;
     max-width: 500px;
@@ -1597,7 +1597,7 @@
 }
 
 .section-label {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 0.85rem;
     font-weight: 500;
     color: #e67e22;
@@ -1608,7 +1608,7 @@
 }
 
 .section-header h2 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 2.8rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -1617,7 +1617,7 @@
 }
 
 .section-header p {
-    font-family: 'Inter', sans-serif;
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.1rem;
     color: #94a3b8;
     max-width: 400px;
@@ -1690,7 +1690,7 @@
 }
 
 .belief-card h3 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -1699,7 +1699,7 @@
 }
 
 .belief-card p {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1rem;
     line-height: 1.6;
     color: #cbd5e1;
@@ -1790,7 +1790,7 @@
 }
 
 .section-header h2 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 3rem;
     font-weight: 600;
     color: #2c3e50;
@@ -1799,7 +1799,7 @@
 }
 
 .section-header p {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.2rem;
     color: #6b7280;
     max-width: 500px;
@@ -1877,7 +1877,7 @@
 }
 
 .card-header h3 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: 1.4rem;
     font-weight: 600;
     color: #2c3e50;
@@ -2000,7 +2000,7 @@
 }
 
 .involved-card h4 {
-    font-family: 'Fraunces', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     color: #2c3e50;
     margin-bottom: 1rem;
     font-size: 1.4rem;
@@ -2162,7 +2162,7 @@
 }
 
 .blog-title {
-    font-family: 'Anton', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     color: #2c3e50;
     margin-bottom: 1rem;
@@ -2178,6 +2178,7 @@
     margin-bottom: 2rem;
     font-style: italic;
     border-left: 4px solid #e67e22;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     padding-left: 1.5rem;
 }
 /* Enhanced Author Card */
@@ -2247,7 +2248,7 @@
     font-weight: 700;
     color: #2c3e50;
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
 .author-role {
@@ -2260,6 +2261,7 @@
     text-transform: uppercase;
     letter-spacing: 0.8px;
     box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
 .author-bio {
@@ -2288,6 +2290,7 @@
     padding: 0.4rem 0.8rem;
     border-radius: 8px;
     border: 1px solid #e9ecef;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
 
@@ -2311,7 +2314,7 @@
     line-height: 1.7;
     color: #444;
     text-align: left;
-    font-family:'Inter', sans-serif;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     margin-bottom: 1.5rem;
 }
 

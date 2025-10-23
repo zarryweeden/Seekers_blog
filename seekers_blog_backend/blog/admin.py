@@ -31,10 +31,11 @@ class AuthorAdmin(admin.ModelAdmin):
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
     form = BlogPostForm 
-    list_display = ['title', 'author', 'category', 'published', 'created_at', 'views']
+    list_display = ['title', 'author', 'category', 'published','featured','featured_order', 'created_at', 'views']
     list_filter = ['published', 'category', 'created_at']
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
+    list_editable=['featured','featured_order']
 
 
 

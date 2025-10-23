@@ -37,6 +37,8 @@ class BlogPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
+    featured = models.BooleanField(default=False)
+    featured_order= models.IntegerField(default=0)
     
     def __str__(self):
         return self.title

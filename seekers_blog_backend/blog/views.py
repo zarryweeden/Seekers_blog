@@ -35,10 +35,10 @@ class BlogPostViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def featured(self, request):
-        featured_posts = BlogPost.objects.filter(published=True).order_by('-views')[:3]
-        serializer = self.get_serializer(featured_posts, many=True)
+        featured_posts = BlogPost.objects.filter(published=True, featured=True).order_by('featured_order')[:3]
+        serializer = self.get_serializer(featured_posts, many=True, context={'request': request})
         return Response(serializer.data)
-    
+
 
 
 class BlogPostListView(generics.ListAPIView):

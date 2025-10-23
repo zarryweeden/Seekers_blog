@@ -1,11 +1,42 @@
 import { FaHandHoldingHeart,FaInstagram,FaWhatsapp,FaFacebook,FaArrowRight,FaTiktok } from "react-icons/fa";
 import { Link,useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import { blogAPI } from "../services/api";
 
 export default function Landing(){
   const location = useLocation()
     const isActive = (path)=>location.pathname ===path;
     const [menuOpen, setMenuOpen] = useState(false);
+    const [featuredPosts, setFeaturedPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const MAX_FEATURED_POSTS = 3;
+        useEffect(() => {
+        fetchFeaturedPosts();
+    }, []);
+
+    const fetchFeaturedPosts = async () => {
+        try {
+            setLoading(true);
+              const response = await blogAPI.getFeaturedPosts(); 
+              setFeaturedPosts(response.data);
+            
+            setFeaturedPosts(featured);
+        } catch (error) {
+            console.error('Error fetching featured posts:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long'
+        });
+    };
+
+
+
     return(
     <div style={{minHeight:'80vh'}}>
       {/* Dim background when menu is open */}
@@ -130,60 +161,50 @@ export default function Landing(){
   </div>
 </div>
 
-<div className="pop-blogs-section">
-  <div className="pop-blogs-section-header">
-    Featured Blog Posts
-  </div>
-  <div className="pop-blogs-cards">
-    <div className="pop-blogs-card1">
-      <div className="pop-blogs-card-image-container">
-      <img className="pop-blogs-card1-img" src="/images/image-seekers-blog1.jpg" alt="" />
-      <h3 className="pop-blogs-category-overlay">Christian Living</h3>
-      </div>
-      <div className="pop-blogs-card1-text">
-        <h1>When the Path Divides: Discerning God's Will at Life's Crossroads.</h1>
-        <p>Like standing at a cliff overlooking multiple paths, 
-          we often face decisions that shape our spiritual journey.
-           Discover how Scripture illuminates the way forward when every choice seems equally uncertain.</p>
-           <h4>By Mark Otieno , 2025</h4>
-            <button className="read-more-btn">Read Full Article →</button>
-           
-           
-      </div>
-      
-    </div>
-    <div className="pop-blogs-card1">
-      <div className="pop-blogs-card-image-container">
-      <img className="pop-blogs-card1-img" src="/images/image-seekers-blog2.jpg" alt="" />
-      <h3 className="pop-blogs-category-overlay">Modern Christianity</h3>
-      </div>
-      <div className="pop-blogs-card1-text">
-        <h1>Swipe Right on Salvation: Finding Authentic Faith in a Digital World.</h1>
-        <p>In an age of endless scrolling and virtual connections, does the cross still hold power 
-          on a 6-inch screen? Exploring how to cultivate genuine spirituality when our attention is 
-          the world's most valued commodity.</p>
-           <h4>By Ronn Odoyo , 2025</h4>
-            <button className="read-more-btn">Read Full Article →</button>
-           
-      </div>
-    </div>
-        <div className="pop-blogs-card1">
-            <div className="pop-blogs-card-image-container">
-        <img className="pop-blogs-card1-img" src="/images/image-seekers-blog6.jpg" alt="" />
-        <h3 className="pop-blogs-category-overlay">Family Life</h3>
-        </div>
-      <div className="pop-blogs-card1-text">
-        <h1>More Than Matching Hoodies: Building Christ-Centered Relationships as Adventists.</h1>
-        <p>When 'Jesus loves you' isn't just a fashion statement—practical guidance for Adventist 
-          couples seeking relationships that honor God, respect boundaries, and build toward covenant marriage.</p>
-        <h4>By Sandra Jepchumba , 2025</h4>
-         <button className="read-more-btn">Read Full Article →</button>
-      
-      </div>
-    </div>
-  </div>
+            <div className="pop-blogs-section">
+                <div className="pop-blogs-section-header">
+                    Featured Blog Posts
+                </div>
 
-</div>
+                {loading ? (
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <p>Loading featured content...</p>
+                    </div>
+                ) : featuredPosts.length > 0 ? (
+                    <div className="pop-blogs-cards">
+                        {featuredPosts.map(post => (
+                            <div key={post.id} className="pop-blogs-card1">
+                                <div className="pop-blogs-card-image-container">
+                                    <img
+                                        className="pop-blogs-card1-img"
+                                        src={post.featured_image || '/images/article-placeholder.jpg'}
+                                        alt={post.title}
+                                        onError={(e) => {
+                                            e.target.src = '/images/article-placeholder.jpg';
+                                        }}
+                                    />
+                                    <h3 className="pop-blogs-category-overlay">
+                                        {post.category_name || 'Uncategorized'}
+                                    </h3>
+                                </div>
+                                <div className="pop-blogs-card1-text">
+                                    <h1>{post.title}</h1>
+                                    <p>{post.excerpt || 'Read this inspiring article...'}</p>
+                                    <h4>By {post.author_name}, {formatDate(post.created_at)}</h4>
+                                    <Link to={`/blog/${post.id}`} className="read-more-btn">
+                                        Read Full Article →
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="no-posts-message">
+                        <p>No featured posts available. Check back soon for inspiring content!</p>
+                    </div>
+                )}
+            </div>
 
 <div className="footer-section">
   <div className="footer-blocks">

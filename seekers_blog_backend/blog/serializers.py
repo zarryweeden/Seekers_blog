@@ -29,7 +29,7 @@ class BlogPostListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'slug', 'excerpt', 'author', 'author_name', 'author_profile_image',
             'category', 'category_name', 'featured_image', 
-            'created_at', 'views'
+            'created_at', 'views','featured','featured_order'
         ]
     def get_author_profile_image(self, obj):  # ADD THIS METHOD
         if obj.author.profile_image:
@@ -50,7 +50,7 @@ class BlogPostDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'slug', 'content', 'formatted_content', 'excerpt', 'author', 'author_name', 
             'author_profile_image', 'author_bio', 'category', 'category_name', 
-            'featured_image', 'created_at', 'updated_at', 'views', 'published'
+            'featured_image', 'created_at', 'updated_at', 'views', 'published','featured','featured_order'
         ]
     def get_author_profile_image(self, obj):  # ADD THIS METHOD
         if obj.author.profile_image:
