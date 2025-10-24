@@ -141,7 +141,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # For development only - allows all origins
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 
 # Add at the bottom for media files
 MEDIA_URL = '/media/'
