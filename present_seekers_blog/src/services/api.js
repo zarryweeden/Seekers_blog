@@ -11,22 +11,22 @@ const api = axios.create({
 
 export const blogAPI = {
   // Get all blog posts
-  getPosts: () => api.get('/blog/posts/'),
+  getPosts: () => api.get('/posts/'),
   
   // Get posts by category
-  getPostsByCategory: (category) => api.get(`/blog/posts/?category=${category}`),
+  getPostsByCategory: (category) => api.get(`/posts/?category=${category}`),
   
   // Get single post by ID
-  getPost: (id) => api.get(`/blog/posts/${id}/`),
+  getPost: (id) => api.get(`/posts/${id}/`),
   
   // Get all categories
-  getCategories: () => api.get('/blog/categories/'),
+  getCategories: () => api.get('/categories/'),
   
   // Get featured posts
-  getFeaturedPosts: () => api.get('/blog/posts/featured/'),
+  getFeaturedPosts: () => api.get('/posts/featured/'),
   
   // Increment views
-  incrementViews: (id) => api.post(`/blog/posts/${id}/increment_views/`),
+  incrementViews: (id) => api.post(`/posts/${id}/increment_views/`),
 };
 
 
