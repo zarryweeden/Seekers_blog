@@ -23,9 +23,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'seekersblog-production.up.railway.app',
     'seekers-blog.vercel.app',
-    '.railway.app',  # ✅ Catches ALL Railway domains
-    '.vercel.app',   # ✅ Catches ALL Vercel domains
-    '.onrender.com', # ✅ Catches ALL Render domains
+    '.railway.app', 
+    '.vercel.app',   
+    '.onrender.com', 
 ]
 
 # Application definition
