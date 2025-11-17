@@ -185,3 +185,12 @@ print(f"PGPORT: {os.environ.get('PGPORT')}")
 
 print(f"Using database: {DATABASES['default']['ENGINE']}")
 print(f"Database name: {DATABASES['default']['NAME']}")
+
+
+# Add to bottom of settings.py
+try:
+    from django.db import connection
+    connection.ensure_connection()
+    print("✅ PostgreSQL connection successful!")
+except Exception as e:
+    print(f"❌ PostgreSQL connection failed: {e}")
