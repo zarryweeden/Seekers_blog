@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import BlogPost, Category, Author
+from .models import *
+from django.contrib.auth.models import User
 
 class AuthorSerializer(serializers.ModelSerializer):
     profile_image = serializers.SerializerMethodField()
@@ -37,20 +38,39 @@ class BlogPostListSerializer(serializers.ModelSerializer):
             if request:
                 return request.build_absolute_uri(obj.author.profile_image.url)
         return None
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'user_name', 'user_first_name', 'user_last_name', 
+                 'content', 'created_at', 'updated_at']
 
 class BlogPostDetailSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
     author_name = serializers.CharField(source='author.display_name', read_only=True)
     author_profile_image = serializers.SerializerMethodField()
     author_bio = serializers.CharField(source='author.bio', read_only=True)
-    formatted_content = serializers.SerializerMethodField()  # ADD THIS LINE
+    formatted_content = serializers.SerializerMethodField() 
+    likes_count = serializers.SerializerMethodField()
+    user_has_liked = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
     
     class Meta:
         model = BlogPost
         fields = [
             'id', 'title', 'slug', 'content', 'formatted_content', 'excerpt', 'author', 'author_name', 
             'author_profile_image', 'author_bio', 'category', 'category_name', 
-            'featured_image', 'created_at', 'updated_at', 'views', 'published','featured','featured_order'
+            'featured_image', 'created_at', 'updated_at', 'views', 'published','featured','featured_order',
+            'likes_count', 'user_has_liked', 'comments'
         ]
     def get_author_profile_image(self, obj):  # ADD THIS METHOD
         if obj.author.profile_image:
@@ -75,3 +95,16 @@ class BlogPostDetailSerializer(serializers.ModelSerializer):
         paragraphs = [' '.join(p.splitlines()) for p in paragraphs]
 
         return paragraphs
+    
+    def get_likes_count(self, obj):
+        return obj.likes_count()
+    
+    def get_user_has_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.user_has_liked(request.user)
+        return False
+    
+    def get_comments(self, obj):
+        comments = obj.comment_set.all().order_by('-created_at')
+        return CommentSerializer(comments, many=True).data

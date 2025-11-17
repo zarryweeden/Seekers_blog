@@ -60,3 +60,31 @@ class BlogPost(models.Model):
         if not self.slug:
             self.slug = self.title.replace(' ', '-').lower()
         super().save(*args, **kwargs)
+
+    def likes_count(self):
+        return self.like_set.count()
+    
+    def user_has_liked(self, user):
+        if not user.is_authenticated:
+            return False
+        return self.like_set.filter(user=user).exists()
+    
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['user', 'post'] 
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.post.title}"

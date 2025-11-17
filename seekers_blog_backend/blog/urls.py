@@ -9,5 +9,6 @@ router.register(r'categories', views.CategoryViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('test-image-upload/', views.test_image_upload, name='test-image-upload'),
+    path('posts/<int:post_id>/comments/', views.post_comments, name='post-comments'),
     
 ]

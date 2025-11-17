@@ -5,6 +5,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import BlogPost, Category
 from .serializers import BlogPostListSerializer, BlogPostDetailSerializer, CategorySerializer
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import Like, Comment
+from .serializers import CommentSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -12,6 +17,64 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class BlogPostViewSet(viewsets.ModelViewSet):
     queryset = BlogPost.objects.filter(published=True)
+
+    @action(detail=True, methods=['post'])
+    @permission_classes([IsAuthenticated])
+    def toggle_like(self, request, pk=None):
+        blog_post = self.get_object()
+        user = request.user
+        
+        try:
+            like = Like.objects.get(user=user, post=blog_post)
+            like.delete()
+            liked = False
+        except Like.DoesNotExist:
+            Like.objects.create(user=user, post=blog_post)
+            liked = True
+        
+        return Response({
+            'liked': liked,
+            'likes_count': blog_post.likes_count()
+        })
+    
+    @action(detail=True, methods=['get'])
+    def comments(self, request, pk=None):
+        blog_post = self.get_object()
+        comments = blog_post.comment_set.all().order_by('-created_at')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'])
+    @permission_classes([IsAuthenticated])
+    def add_comment(self, request, pk=None):
+        blog_post = self.get_object()
+        content = request.data.get('content', '').strip()
+        
+        if not content:
+            return Response(
+                {'error': 'Comment content is required'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        comment = Comment.objects.create(
+            user=request.user,
+            post=blog_post,
+            content=content
+        )
+        
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    # Add these standalone views for anonymous users (if needed)
+    @api_view(['GET'])
+    def post_comments(request, post_id):
+        try:
+            post = BlogPost.objects.get(id=post_id, published=True)
+            comments = post.comment_set.all().order_by('-created_at')
+            serializer = CommentSerializer(comments, many=True)
+            return Response(serializer.data)
+        except BlogPost.DoesNotExist:
+            return Response({'error': 'Post not found'}, status=404)
     
     def get_serializer_class(self):
         if self.action == 'retrieve':

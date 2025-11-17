@@ -11,7 +11,13 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 export const blogAPI = {
   getPosts: () => api.get('/posts/'),
   getPostsByCategory: (category) => api.get(`/posts/?category=${category}`),
@@ -19,6 +25,18 @@ export const blogAPI = {
   getCategories: () => api.get('/categories/'),
   getFeaturedPosts: () => api.get('/posts/featured/'),
   incrementViews: (id) => api.post(`/posts/${id}/increment_views/`),
+  toggleLike: (postId) => api.post(`/posts/${postId}/toggle_like/`),
+  getComments: (postId) => api.get(`/posts/${postId}/comments/`),
+  addComment: (postId, content) => api.post(`/posts/${postId}/add_comment/`, { content }),
 };
 
 export default api;
+
+
+
+
+
+
+
+
+
