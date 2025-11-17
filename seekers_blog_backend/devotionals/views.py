@@ -1,3 +1,6 @@
-from django.shortcuts import render
+# devotionals/views.py
+from django.http import JsonResponse
+from .models import *
 
-# Create your views here.
+def devotional_list(request):
+    return JsonResponse({'devotionals': [], 'message': 'Devotionals endpoint ready'})
