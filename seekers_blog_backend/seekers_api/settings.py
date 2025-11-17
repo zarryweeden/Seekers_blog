@@ -173,24 +173,3 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
-
-# DEBUG DATABASE CONFIGURATION
-print("=== DATABASE DEBUG INFO ===")
-print(f"DATABASE_URL: {os.environ.get('DATABASE_URL')}")
-print(f"PGDATABASE: {os.environ.get('PGDATABASE')}")
-print(f"PGUSER: {os.environ.get('PGUSER')}") 
-print(f"PGPASSWORD: {os.environ.get('PGPASSWORD')}")
-print(f"PGHOST: {os.environ.get('PGHOST')}")
-print(f"PGPORT: {os.environ.get('PGPORT')}")
-
-print(f"Using database: {DATABASES['default']['ENGINE']}")
-print(f"Database name: {DATABASES['default']['NAME']}")
-
-
-# Add to bottom of settings.py
-try:
-    from django.db import connection
-    connection.ensure_connection()
-    print("✅ PostgreSQL connection successful!")
-except Exception as e:
-    print(f"❌ PostgreSQL connection failed: {e}")
