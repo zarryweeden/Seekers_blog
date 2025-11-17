@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import BlogPost, Category
 from .serializers import BlogPostListSerializer, BlogPostDetailSerializer, CategorySerializer
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -96,3 +98,27 @@ def test_image_upload(request):
     return JsonResponse({
         'message': 'Send POST request with image file to test upload'
     })
+
+
+
+
+
+def fix_admin(request):
+    """Create admin user - guaranteed to work"""
+    try:
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser('admin', 'admin@seekers.com', 'admin123456')
+            return HttpResponse('''
+                <h1>✅ SUCCESS!</h1>
+                <p><strong>Admin User Created!</strong></p>
+                <p>Username: <code>admin</code></p>
+                <p>Password: <code>admin123456</code></p>
+                <br>
+                <p><a href="/admin/" style="color: blue; font-size: 18px;">👉 CLICK HERE TO GO TO ADMIN PANEL</a></p>
+                <br>
+                <p style="color: red;">Remove this code after use!</p>
+            ''')
+        else:
+            return HttpResponse('Admin user already exists. <a href="/admin/">Go to Admin</a>')
+    except Exception as e:
+        return HttpResponse(f'Error: {str(e)}')
