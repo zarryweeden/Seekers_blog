@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// For local development - use your local Django server
-const API_BASE_URL = 'http://127.0.0.1:8000/api/blog';
+// Use different URLs for development vs production
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://seekersblog-production.up.railway.app/api/blog'  // Production
+  : 'http://127.0.0.1:8000/api/blog';                         // Development
 
 const api = axios.create({
   baseURL: API_BASE_URL,
