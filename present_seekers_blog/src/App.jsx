@@ -4,6 +4,7 @@ import Blogs from './assets/Blogs'
 import About from './assets/About'
 import BlogDetails from './assets/blogDetails'
 import CategoryArticles from './assets/CategoryArticles'
+import NotFound from './assets/NotFound' 
 
 
 
@@ -17,6 +18,7 @@ export default function App(){
         <Route path='/about' element={<About/>}/>
         <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/category/:categoryName" element={<CategoryArticles />} />
+        <Route path="*" element={<NotFound />} /> 
         
       </Routes>
     </div>
