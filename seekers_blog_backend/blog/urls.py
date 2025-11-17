@@ -8,7 +8,8 @@ router.register(r'posts', BlogPostViewSet, basename='posts')
 router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('posts/', views.blog_post_list, name='blogpost-list'),
-    path('test-upload/', views.test_cloudinary, name='test-cloudinary'),
+    path('posts/<int:pk>/', views.blog_post_detail, name='blogpost-detail'),
+    path('posts/featured/', views.featured_posts, name='featured-posts'),
+    path('test-real-image-upload/', views.test_real_image_upload, name='test-real-image-upload'),
 ]
