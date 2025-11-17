@@ -76,26 +76,43 @@ TEMPLATES = [
 WSGI_APPLICATION = 'seekers_api.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('PGDATABASE'),
-        'USER': os.environ.get('PGUSER'),
-        'PASSWORD': os.environ.get('PGPASSWORD'),
-        'HOST': os.environ.get('PGHOST'),
-        'PORT': os.environ.get('PGPORT'),
-    }
-}
+import os
+from urllib.parse import urlparse
 
-# Fallback to SQLite if PostgreSQL not available (for local development)
-if not all([os.environ.get('PGDATABASE'), os.environ.get('PGUSER'), os.environ.get('PGPASSWORD')]):
+# Check if we have DATABASE_URL (Railway) or individual PG variables
+if os.environ.get('DATABASE_URL'):
+    # Parse DATABASE_URL
+    db_url = urlparse(os.environ.get('DATABASE_URL'))
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_url.path[1:],  # Remove leading slash
+            'USER': db_url.username,
+            'PASSWORD': db_url.password,
+            'HOST': db_url.hostname,
+            'PORT': db_url.port,
+        }
+    }
+elif all([os.environ.get('PGDATABASE'), os.environ.get('PGUSER'), os.environ.get('PGPASSWORD')]):
+    # Use individual PG variables if available
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('PGDATABASE'),
+            'USER': os.environ.get('PGUSER'),
+            'PASSWORD': os.environ.get('PGPASSWORD'),
+            'HOST': os.environ.get('PGHOST'),
+            'PORT': os.environ.get('PGPORT'),
+        }
+    }
+else:
+    # Fallback to SQLite for local development only
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -156,3 +173,15 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
+
+# DEBUG DATABASE CONFIGURATION
+print("=== DATABASE DEBUG INFO ===")
+print(f"DATABASE_URL: {os.environ.get('DATABASE_URL')}")
+print(f"PGDATABASE: {os.environ.get('PGDATABASE')}")
+print(f"PGUSER: {os.environ.get('PGUSER')}") 
+print(f"PGPASSWORD: {os.environ.get('PGPASSWORD')}")
+print(f"PGHOST: {os.environ.get('PGHOST')}")
+print(f"PGPORT: {os.environ.get('PGPORT')}")
+
+print(f"Using database: {DATABASES['default']['ENGINE']}")
+print(f"Database name: {DATABASES['default']['NAME']}")
