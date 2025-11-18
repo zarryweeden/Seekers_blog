@@ -152,35 +152,84 @@ export default function BlogDetail() {
     return (
         <div className="blog-detail-page">
             {/* Navigation */}
-            <div className="nav-bar">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 150 50"
-                    preserveAspectRatio="xMidYMid meet"
-                >
-                    <defs>
-                        <style type="text/css">{`
-                            @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-                            @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
-                        `}</style>
-                    </defs>
-                    <text x="39" y="19" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "0.75rem", fontWeight: '850', fill: "#2c3e50" }}>
-                        The
-                    </text>
-                    <text x="10" y="36" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.6875rem", fontWeight: '650', fill: "#e67e22", letterSpacing: '0.09375rem' }}>
-                        Seekers
-                    </text>
-                    <text x="29" y="46" style={{ fontFamily: "'Fraunces', serif", fontSize: "0.75rem", fontWeight: '850', fill: "#2c3e50" }}>
-                        ministry
-                    </text>
-                </svg>
+<div className="nav-bar" style={{ display: 'flex', flexDirection: 'row', textAlign: 'center' }}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20%"
+    height="100%"
+    viewBox="0 0 150 50"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <style type="text/css">{`
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
+      `}</style>
+    </defs>
+    <text
+      x="39"
+      y="19"
+      style={{
+        fontFamily: "'Great Vibes', cursive",
+        fontSize: "0.75rem", /* 12px → rem */
+        fontWeight: '850',
+        fill: "#2c3e50"
+      }}
+    >
+      The
+    </text>
+    <text
+      x="10"
+      y="36"
+      style={{
+        fontFamily: "'Great Vibes', cursive",
+        fontSize: "1.6875rem", /* 27px → rem */
+        fontWeight: '650',
+        fill: "#e67e22",
+        letterSpacing: '0.09375rem' /* 1.5px → rem */
+      }}
+    >
+      Seekers
+    </text>
+    <text
+      x="29"
+      y="46"
+      style={{
+        fontFamily: "'Fraunces', serif",
+        fontSize: "0.75rem", /* 12px → rem */
+        fontWeight: '850',
+        fill: "#2c3e50"
+      }}
+    >
+      ministry
+    </text>
+  </svg>
 
-                <nav className="desktop-nav">
-                    <Link to="/home" className="nav-item">Home</Link>
-                    <Link to="/blogs" className="nav-item">Blogs</Link>
-                    <Link to="/about" className="nav-item">About Us</Link>
-                </nav>
-            </div>
+  {/* Hamburger icon */}
+  <button
+    className={`menu-toggle ${menuOpen ? "open" : ""}`}
+    onClick={() => setMenuOpen(!menuOpen)}
+    aria-label="Toggle navigation menu"
+  >
+    <span className="menu-bar"></span>
+    <span className="menu-bar"></span>
+    <span className="menu-bar"></span>
+  </button>
+
+  {/* Desktop navigation */}
+  <nav className="desktop-nav">
+    <Link to="/home" className={`nav-item ${isActive('/home') ? 'active' : ''}`}>Home</Link>
+    <Link to="/blogs" className={`nav-item ${isActive('/blogs') ? 'active' : ''}`}>Blogs</Link>
+    <Link to="/about" className={`nav-item ${isActive('/about') ? 'active' : ''}`}>About Us</Link>
+  </nav>
+
+  {/* Mobile slide menu */}
+  <div className={`nav-links ${menuOpen ? "show" : ""}`}>
+    <Link to="/home" className={`nav-item ${isActive('/home') ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>Home</Link>
+    <Link to="/blogs" className={`nav-item ${isActive('/blogs') ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>Blogs</Link>
+    <Link to="/about" className={`nav-item ${isActive('/about') ? 'active' : ''}`} onClick={() => setMenuOpen(false)}>About Us</Link>
+  </div>
+</div>
 
             {/* Blog Content */}
             <article className="blog-detail-container">
@@ -276,210 +325,261 @@ export default function BlogDetail() {
                     </div>
                 </div>
 
-                {/* Enhanced Article Footer */}
-                <footer className="article-footer">
-                    <div className="footer-actions">
-                        <div className="action-group">
-                            <div className="action-label">Found this helpful?</div>
-                            <div className="action-buttons">
-                                <button 
-                                    className={`action-btn like-btn ${isLiked ? 'liked' : ''}`}
-                                    onClick={handleLike}
-                                >
-                                    {isLiked ? <FaHeart style={{ color: '#e67e22' }} /> : <FaRegHeart />} 
-                                    {likes} Like{likes !== 1 ? 's' : ''}
-                                </button>
-                                <button 
-                                    className={`action-btn comment-btn ${showComments ? 'active' : ''}`}
-                                    onClick={handleCommentClick}
-                                >
-                                    <FaRegComment /> 
-                                    Comment
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div className="share-group">
-                            <div className="share-label">Share this wisdom</div>
-                            <div className="social-share-buttons">
-                                <button 
-                                    className="social-share-btn facebook" 
-                                    onClick={() => shareArticle('facebook')}
-                                    aria-label="Share on Facebook"
-                                >
-                                    <FaFacebook />
-                                </button>
-                                <button 
-                                    className="social-share-btn twitter" 
-                                    onClick={() => shareArticle('twitter')}
-                                    aria-label="Share on Twitter"
-                                >
-                                    <FaTwitter />
-                                </button>
-                                <button 
-                                    className="social-share-btn whatsapp" 
-                                    onClick={() => shareArticle('whatsapp')}
-                                    aria-label="Share on WhatsApp"
-                                >
-                                    <FaWhatsapp />
-                                </button>
-                                <button 
-                                    className="social-share-btn copy" 
-                                    onClick={() => shareArticle('copy')}
-                                    aria-label="Copy link"
-                                >
-                                    <FaLink />
-                                    {copied && <span className="copy-tooltip">Link copied!</span>}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Comments Section */}
-                    {showComments && (
-                        <div className="comments-section">
-                            <div className="comments-header">
-                                <h3>Comments ({comments.length})</h3>
-                            </div>
-                            
-                            {/* Add Comment Form */}
-                            <div className="add-comment-form">
-                                <textarea
-                                    ref={commentInputRef}
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Share your thoughts..."
-                                    className="comment-input"
-                                    rows="3"
-                                />
-                                <div className="comment-actions">
-                                    <button 
-                                        onClick={handleAddComment}
-                                        disabled={!newComment.trim() || commentLoading}
-                                        className="submit-comment-btn"
-                                    >
-                                        {commentLoading ? 'Posting...' : 'Post Comment'}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Comments List */}
-                            <div className="comments-list">
-                                {comments.length === 0 ? (
-                                    <div className="no-comments">
-                                        <p>No comments yet. Be the first to share your thoughts!</p>
-                                    </div>
-                                ) : (
-                                    comments.map((comment) => (
-                                        <div key={comment.id} className="comment-item">
-                                            <div className="comment-header">
-                                                <div className="comment-author">
-                                                    <FaUser className="comment-avatar" />
-                                                    <span className="comment-author-name">
-                                                        {comment.user_first_name && comment.user_last_name 
-                                                            ? `${comment.user_first_name} ${comment.user_last_name}`
-                                                            : comment.user_name
-                                                        }
-                                                    </span>
-                                                </div>
-                                                <span className="comment-date">
-                                                    {formatDateTime(comment.created_at)}
-                                                </span>
-                                            </div>
-                                            <div className="comment-content">
-                                                {comment.content}
-                                            </div>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </div>
-                    )}
-                    
-                    <div className="navigation-actions">
-                        <button onClick={() => navigate(-1)} className="nav-action-btn back-action">
-                            <FaArrowLeft /> Back to Articles
-                        </button>
-                        <Link to="/blogs" className="nav-action-btn explore-action">
-                            Explore More Content <FaArrowRight />
-                        </Link>
-                    </div>
-                </footer>
-            </article>
-
-            {/* Footer */}
-            <div className="footer-section">
-                <div className="footer-blocks">
-                    {/* Brand & Social Section */}
-                    <div className="footer-brand-social">
-                        <div className="brand-content">
-                            <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                viewBox="0 0 150 50"
-                                preserveAspectRatio="xMidYMid meet"
-                            >
-                                <defs>
-                                    <style type="text/css">{`
-                                        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-                                        @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');`}</style>
-                                </defs>
-                                <text x="39" y="23" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "0.75rem", fontWeight:'850', fill: "#fff" }}>
-                                    The
-                                </text>
-                                <text x="10" y="40" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.6875rem", fontWeight:'650', fill: "#e67e22", letterSpacing:'0.09375rem' }}>
-                                    Seekers 
-                                </text>
-                                <text x="29" y="50" style={{ fontFamily: "'Fraunces', serif", fontSize: "0.75rem", fontWeight:'850', fill: "#fff" }}>
-                                    ministry
-                                </text>
-                            </svg>
-                            <p className="footer-tagline">
-                                Growing together in faith, hope, and love.
-                            </p>
-                        </div>
-                        
-                        <div className="social-icons">
-                            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-                            <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
-                            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-                            <a href="#" aria-label="TikTok"><FaTiktok /></a>
-                        </div>
-                    </div>
-
-                    {/* Newsletter Section */}
-                    <div className="footer-newsletter">
-                        <div className="newsletter-header">
-                            <h3>Join Our Journey</h3>
-                            <p>Get spiritual insights delivered weekly</p>
-                        </div>
-                        
-                        <div className="newsletter-form">
-                            <input 
-                                type="email" 
-                                placeholder="Your email address" 
-                                className="newsletter-input"
-                            />
-                            <button className="subscribe-btn">
-                                <FaArrowRight />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Footer Bottom */}
-                <div className="footer-bottom">
-                    <div className="footer-divider"></div>
-                    <div className="footer-copyright">
-                        <span>© 2025 The Seekers Ministry. All rights reserved.</span>
-                        <div className="footer-links">
-                            <a href="/privacy">Privacy</a>
-                            <a href="/terms">Terms</a>
-                            <a href="/contact">Contact</a>
-                        </div>
-                    </div>
+<footer className="article-footer">
+    <div className="footer-actions">
+        <div className="engagement-section">
+            <div className="engagement-header">
+                <div className="action-label">Enjoyed this article?</div>
+                <div className="engagement-stats">
+                    <span className="stat-item">
+                        <FaEye /> {post.views}
+                    </span>
+                    <span className="stat-item">
+                        <FaHeart /> {likes}
+                    </span>
+                    <span className="stat-item">
+                        <FaRegComment /> {comments.length}
+                    </span>
                 </div>
             </div>
+            
+            <div className="engagement-buttons">
+                <button 
+                    className={`engagement-btn like-btn ${isLiked ? 'liked' : ''}`}
+                    onClick={handleLike}
+                >
+                    {isLiked ? <FaHeart /> : <FaRegHeart />}
+                    <span className="btn-text">{isLiked ? 'Liked' : 'Like'}</span>
+                </button>
+                <button 
+                    className={`engagement-btn comment-btn ${showComments ? 'active' : ''}`}
+                    onClick={handleCommentClick}
+                >
+                    <FaRegComment />
+                    <span className="btn-text">Comment</span>
+                </button>
+            </div>
+        </div>
+        
+        <div className="share-section">
+            <div className="share-header">
+                <div className="share-label">Share with others</div>
+            </div>
+            <div className="share-platforms">
+                <button 
+                    className="share-platform facebook" 
+                    onClick={() => shareArticle('facebook')}
+                    aria-label="Share on Facebook"
+                >
+                    <FaFacebook />
+                    <span>Facebook</span>
+                </button>
+                <button 
+                    className="share-platform twitter" 
+                    onClick={() => shareArticle('twitter')}
+                    aria-label="Share on Twitter"
+                >
+                    <FaTwitter />
+                    <span>Twitter</span>
+                </button>
+                <button 
+                    className="share-platform whatsapp" 
+                    onClick={() => shareArticle('whatsapp')}
+                    aria-label="Share on WhatsApp"
+                >
+                    <FaWhatsapp />
+                    <span>WhatsApp</span>
+                </button>
+                <button 
+                    className="share-platform copy" 
+                    onClick={() => shareArticle('copy')}
+                    aria-label="Copy link"
+                >
+                    <FaLink />
+                    <span>{copied ? 'Copied!' : 'Copy Link'}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {/* Comments Section */}
+    {showComments && (
+        <div className="comments-section">
+            <div className="comments-header">
+                <div className="comments-title">
+                    <h3>Community Discussion</h3>
+                    <span className="comments-count">({comments.length})</span>
+                </div>
+                <p className="comments-subtitle">Join the conversation</p>
+            </div>
+            
+            {/* Add Comment Form */}
+            <div className="add-comment-form">
+                <div className="comment-input-container">
+                    <textarea
+                        ref={commentInputRef}
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="What are your thoughts on this article?..."
+                        className="comment-input"
+                        rows="4"
+                    />
+                    <div className="input-char-count">
+                        {newComment.length}/500
+                    </div>
+                </div>
+                <div className="comment-actions">
+                    <button 
+                        onClick={() => setShowComments(false)}
+                        className="cancel-btn"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        onClick={handleAddComment}
+                        disabled={!newComment.trim() || commentLoading || newComment.length > 500}
+                        className="submit-comment-btn"
+                    >
+                        {commentLoading ? (
+                            <>
+                                <div className="loading-dots"></div>
+                                Posting...
+                            </>
+                        ) : (
+                            'Post Comment'
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            {/* Comments List */}
+            <div className="comments-list">
+                {comments.length === 0 ? (
+                    <div className="no-comments">
+                        <div className="no-comments-icon">
+                            <FaRegComment />
+                        </div>
+                        <h4>No comments yet</h4>
+                        <p>Be the first to share your insights and start the discussion!</p>
+                    </div>
+                ) : (
+                    <div className="comments-grid">
+                        {comments.map((comment) => (
+                            <div key={comment.id} className="comment-card">
+                                <div className="comment-header">
+                                    <div className="comment-author">
+                                        <div className="author-avatar">
+                                            <FaUser />
+                                        </div>
+                                        <div className="author-info">
+                                            <span className="author-name">
+                                                {comment.user_first_name && comment.user_last_name 
+                                                    ? `${comment.user_first_name} ${comment.user_last_name}`
+                                                    : 'Anonymous Reader'
+                                                }
+                                            </span>
+                                            <span className="comment-date">
+                                                {formatDateTime(comment.created_at)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="comment-content">
+                                    {comment.content}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    )}
+    
+    <div className="navigation-section">
+        <button onClick={() => navigate(-1)} className="nav-btn secondary">
+            <FaArrowLeft />
+            <span>Back to Articles</span>
+        </button>
+        <Link to="/blogs" className="nav-btn primary">
+            <span>Explore More Content</span>
+            <FaArrowRight />
+        </Link>
+    </div>
+</footer>
+            </article>
+
+<div className="footer-section">
+  <div className="footer-blocks">
+    {/* Brand & Social Section */}
+    <div className="footer-brand-social">
+      <div className="brand-content">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          viewBox="0 0 150 50"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <style type="text/css">{`
+              @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+              @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');`}</style>
+          </defs>
+          <text x="39" y="23" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "0.75rem", fontWeight:'850', fill: "#fff" }}>
+            The
+          </text>
+          <text x="10" y="40" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.6875rem", fontWeight:'650', fill: "#e67e22", letterSpacing:'0.09375rem' }}>
+            Seekers 
+          </text>
+          <text x="29" y="50" style={{ fontFamily: "'Fraunces', serif", fontSize: "0.75rem", fontWeight:'850', fill: "#fff" }}>
+            ministry
+          </text>
+        </svg>
+        <p className="footer-tagline">
+          Growing together in faith, hope, and love.
+        </p>
+      </div>
+      
+      <div className="social-icons">
+        <a href="#" aria-label="Instagram"><FaInstagram /></a>
+        <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
+        <a href="#" aria-label="Facebook"><FaFacebook /></a>
+        <a href="#" aria-label="TikTok"><FaTiktok /></a>
+      </div>
+    </div>
+
+    {/* Newsletter Section */}
+    <div className="footer-newsletter">
+      <div className="newsletter-header">
+        <h3>Join Our Journey</h3>
+        <p>Get spiritual insights delivered weekly</p>
+      </div>
+      
+      <div className="newsletter-form">
+        <input 
+          type="email" 
+          placeholder="Your email address" 
+          className="newsletter-input"
+        />
+        <button className="subscribe-btn">
+          <FaArrowRight />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Footer Bottom */}
+  <div className="footer-bottom">
+    <div className="footer-divider"></div>
+    <div className="footer-copyright">
+      <span>© 2025 The Seekers Ministry. All rights reserved.</span>
+      <div className="footer-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
 
             <style jsx>{`
                 .blog-detail-page {
@@ -745,238 +845,531 @@ export default function BlogDetail() {
                 }
 
                 /* Article Footer */
-                .article-footer {
-                    margin-top: 3rem;
-                    padding-top: 2rem;
-                    border-top: 1px solid #e9ecef;
-                }
+.article-footer {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
 
-                .footer-actions {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    margin-bottom: 2rem;
-                    flex-wrap: wrap;
-                    gap: 2rem;
-                }
+    /* Footer Actions */
+    .footer-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
 
-                .action-group, .share-group {
-                    flex: 1;
-                    min-width: 300px;
-                }
+    .engagement-section, .share-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
 
-                .action-label, .share-label {
-                    font-weight: 600;
-                    color: #2c3e50;
-                    margin-bottom: 1rem;
-                    font-size: 1.1rem;
-                }
+    .engagement-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-                .action-buttons {
-                    display: flex;
-                    gap: 1rem;
-                    flex-wrap: wrap;
-                }
+    .action-label, .share-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
 
-                .action-btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.75rem 1.5rem;
-                    border: 2px solid #e67e22;
-                    background: white;
-                    color: #e67e22;
-                    border-radius: 25px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    font-weight: 600;
-                }
+    .engagement-stats {
+        display: flex;
+        gap: 1rem;
+    }
 
-                .action-btn:hover {
-                    background: #e67e22;
-                    color: white;
-                    transform: translateY(-2px);
-                }
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 
-                .like-btn.liked {
-                    background: #e67e22;
-                    color: white;
-                }
+    .engagement-buttons {
+        display: flex;
+        gap: 0.75rem;
+    }
 
-                .comment-btn.active {
-                    background: #e67e22;
-                    color: white;
-                }
+    .engagement-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border: 2px solid #e67e22;
+        background: white;
+        color: #e67e22;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        flex: 1;
+        justify-content: center;
+    }
 
-                .social-share-buttons {
-                    display: flex;
-                    gap: 0.5rem;
-                    flex-wrap: wrap;
-                }
+    .engagement-btn:hover {
+        background: #e67e22;
+        color: white;
+        transform: translateY(-2px);
+    }
 
-                .social-share-btn {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 45px;
-                    height: 45px;
-                    border: 2px solid #e9ecef;
-                    background: white;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    position: relative;
-                }
+    .engagement-btn.liked {
+        background: #e67e22;
+        color: white;
+    }
 
-                .social-share-btn:hover {
-                    transform: translateY(-2px);
-                    border-color: #e67e22;
-                }
+    .engagement-btn.active {
+        background: #e67e22;
+        color: white;
+    }
 
-                .social-share-btn.facebook:hover { background: #1877f2; color: white; }
-                .social-share-btn.twitter:hover { background: #1da1f2; color: white; }
-                .social-share-btn.whatsapp:hover { background: #25d366; color: white; }
-                .social-share-btn.copy:hover { background: #e67e22; color: white; }
+    .btn-text {
+        font-size: 0.9rem;
+    }
 
-                .copy-tooltip {
-                    position: absolute;
-                    top: -40px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: #2c3e50;
-                    color: white;
-                    padding: 0.5rem 1rem;
-                    border-radius: 4px;
-                    font-size: 0.8rem;
-                    white-space: nowrap;
-                }
+    /* Share Section */
+    .share-header {
+        margin-bottom: 1rem;
+    }
 
-                .copy-tooltip::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -5px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    border-left: 5px solid transparent;
-                    border-right: 5px solid transparent;
-                    border-top: 5px solid #2c3e50;
-                }
+    .share-platforms {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
 
-                /* Comments Section */
-                .comments-section {
-                    margin-top: 2rem;
-                    padding: 2rem;
-                    background: #f8f9fa;
-                    border-radius: 12px;
-                    border: 1px solid #e9ecef;
-                }
+    .share-platform {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e9ecef;
+        background: white;
+        color: #2c3e50;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
 
-                .comments-header h3 {
-                    margin: 0 0 1.5rem 0;
-                    color: #2c3e50;
-                    font-size: 1.5rem;
-                }
+    .share-platform:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-                .add-comment-form {
-                    margin-bottom: 2rem;
-                }
+    .share-platform.facebook:hover { 
+        background: #1877f2; 
+        color: white; 
+        border-color: #1877f2;
+    }
+    .share-platform.twitter:hover { 
+        background: #1da1f2; 
+        color: white; 
+        border-color: #1da1f2;
+    }
+    .share-platform.whatsapp:hover { 
+        background: #25d366; 
+        color: white; 
+        border-color: #25d366;
+    }
+    .share-platform.copy:hover { 
+        background: #e67e22; 
+        color: white; 
+        border-color: #e67e22;
+    }
 
-                .comment-input {
-                    width: 100%;
-                    padding: 1rem;
-                    border: 2px solid #e9ecef;
-                    border-radius: 8px;
-                    resize: vertical;
-                    font-family: inherit;
-                    font-size: 1rem;
-                    transition: border-color 0.3s ease;
-                }
+    /* Comments Section */
+    .comments-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
 
-                .comment-input:focus {
-                    outline: none;
-                    border-color: #e67e22;
-                }
+    .comments-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
-                .comment-actions {
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-top: 1rem;
-                }
+    .comments-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
 
-                .submit-comment-btn {
-                    padding: 0.75rem 2rem;
-                    background: #e67e22;
-                    color: white;
-                    border: none;
-                    border-radius: 25px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                }
+    .comments-title h3 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.5rem;
+    }
 
-                .submit-comment-btn:hover:not(:disabled) {
-                    background: #d35400;
-                    transform: translateY(-2px);
-                }
+    .comments-count {
+        background: #e67e22;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
 
-                .submit-comment-btn:disabled {
-                    background: #bdc3c7;
-                    cursor: not-allowed;
-                    transform: none;
-                }
+    .comments-subtitle {
+        color: #7f8c8d;
+        margin: 0;
+    }
 
-                /* Comments List */
-                .comments-list {
-                    space-y: 1.5rem;
-                }
+    /* Add Comment Form */
+    .add-comment-form {
+        margin-bottom: 2rem;
+    }
 
-                .comment-item {
-                    padding: 1.5rem;
-                    background: white;
-                    border-radius: 8px;
-                    border: 1px solid #e9ecef;
-                    margin-bottom: 1rem;
-                }
+    .comment-input-container {
+        position: relative;
+        margin-bottom: 1rem;
+    }
 
-                .comment-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 0.75rem;
-                }
+    .comment-input {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        min-height: 120px;
+    }
 
-                .comment-author {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                }
+    .comment-input:focus {
+        outline: none;
+        border-color: #e67e22;
+    }
 
-                .comment-avatar {
-                    color: #7f8c8d;
-                    font-size: 1rem;
-                }
+    .input-char-count {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        color: #7f8c8d;
+        font-size: 0.8rem;
+        background: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
 
-                .comment-author-name {
-                    font-weight: 600;
-                    color: #2c3e50;
-                }
+    .comment-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+    }
 
-                .comment-date {
-                    color: #7f8c8d;
-                    font-size: 0.875rem;
-                }
+    .cancel-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #bdc3c7;
+        background: white;
+        color: #7f8c8d;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
 
-                .comment-content {
-                    color: #2c3e50;
-                    line-height: 1.6;
-                }
+    .cancel-btn:hover {
+        background: #bdc3c7;
+        color: white;
+    }
 
-                .no-comments {
-                    text-align: center;
-                    padding: 2rem;
-                    color: #7f8c8d;
-                    font-style: italic;
-                }
+    .submit-comment-btn {
+        padding: 0.75rem 2rem;
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .submit-comment-btn:hover:not(:disabled) {
+        background: #d35400;
+        transform: translateY(-2px);
+    }
+
+    .submit-comment-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .loading-dots {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Comments List */
+    .comments-list {
+        space-y: 1.5rem;
+    }
+
+    .no-comments {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #7f8c8d;
+    }
+
+    .no-comments-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .no-comments h4 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+    }
+
+    .comments-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .comment-card {
+        padding: 1.5rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+
+    .comment-header {
+        margin-bottom: 1rem;
+    }
+
+    .comment-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e67e22;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .author-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .author-name {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .comment-date {
+        color: #7f8c8d;
+        font-size: 0.8rem;
+    }
+
+    .comment-content {
+        color: #2c3e50;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    /* Navigation Section */
+    .navigation-section {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e67e22;
+        background: white;
+        color: #e67e22;
+        text-decoration: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .nav-btn:hover {
+        background: #e67e22;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .nav-btn.primary {
+        background: #e67e22;
+        color: white;
+    }
+
+    .nav-btn.primary:hover {
+        background: #d35400;
+    }
+
+    .nav-btn.secondary {
+        background: white;
+        color: #e67e22;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .footer-actions {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .engagement-section, .share-section {
+            padding: 1.25rem;
+        }
+
+        .engagement-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .engagement-stats {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .engagement-buttons {
+            flex-direction: column;
+        }
+
+        .share-platforms {
+            grid-template-columns: 1fr;
+        }
+
+        .comments-section {
+            padding: 1.5rem;
+            margin: 1rem -1rem;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+        }
+
+        .comment-actions {
+            flex-direction: column;
+        }
+
+        .navigation-section {
+            flex-direction: column;
+        }
+
+        .nav-btn {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .article-footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+        }
+
+        .engagement-section, .share-section {
+            padding: 1rem;
+        }
+
+        .comments-section {
+            padding: 1rem;
+        }
+
+        .comments-title {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .comments-title h3 {
+            font-size: 1.25rem;
+        }
+
+        .engagement-btn, .share-platform, .nav-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-text {
+            font-size: 0.85rem;
+        }
+    }
+
+    /* High contrast and accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .engagement-btn, .share-platform, .nav-btn, .submit-comment-btn {
+            transition: none;
+            transform: none;
+        }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .engagement-section, .share-section, .comments-section {
+            background: #2c3e50;
+            border-color: #34495e;
+            color: white;
+        }
+
+        .engagement-btn, .share-platform, .nav-btn.secondary {
+            background: #34495e;
+            color: white;
+            border-color: #e67e22;
+        }
+
+        .comment-input {
+            background: #34495e;
+            border-color: #5d6d7e;
+            color: white;
+        }
+
+        .comment-card {
+            background: #34495e;
+            border-color: #5d6d7e;
+            color: white;
+        }
+    }
 
                 /* Navigation Actions */
                 .navigation-actions {

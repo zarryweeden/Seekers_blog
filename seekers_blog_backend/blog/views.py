@@ -7,9 +7,9 @@ from .models import BlogPost, Category
 from .serializers import BlogPostListSerializer, BlogPostDetailSerializer, CategorySerializer
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from .models import Like, Comment
 from .serializers import CommentSerializer
+from django.contrib.auth.models import User 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -19,10 +19,13 @@ class BlogPostViewSet(viewsets.ModelViewSet):
     queryset = BlogPost.objects.filter(published=True)
 
     @action(detail=True, methods=['post'])
-    @permission_classes([IsAuthenticated])
     def toggle_like(self, request, pk=None):
         blog_post = self.get_object()
-        user = request.user
+        
+        user, created = User.objects.get_or_create(
+            username='anonymous_user',
+            defaults={'email': 'anonymous@example.com'}
+        )
         
         try:
             like = Like.objects.get(user=user, post=blog_post)
@@ -45,7 +48,6 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['post'])
-    @permission_classes([IsAuthenticated])
     def add_comment(self, request, pk=None):
         blog_post = self.get_object()
         content = request.data.get('content', '').strip()
@@ -56,16 +58,20 @@ class BlogPostViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
+        # For now, use a simple user identifier
+        user, created = User.objects.get_or_create(
+            username='anonymous_user',
+            defaults={'email': 'anonymous@example.com'}
+        )
+        
         comment = Comment.objects.create(
-            user=request.user,
+            user=user,
             post=blog_post,
             content=content
         )
         
         serializer = CommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    # Add these standalone views for anonymous users (if needed)
 
     
     def get_serializer_class(self):
