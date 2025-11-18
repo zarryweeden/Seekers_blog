@@ -445,11 +445,16 @@ export default function BlogDetail() {
                                             alt={`${comment.user_first_name} ${comment.user_last_name}`}
                                             onError={(e) => {
                                                 e.target.style.display = 'none';
-                                                e.target.nextSibling.style.display = 'flex';
+                                                const initials = document.querySelector(`.author-initials[data-comment-id="${comment.id}"]`);
+                                                if (initials) initials.style.display = 'flex';
                                             }}
                                         />
                                     ) : null}
-                                    <div className="author-initials">
+                                    <div 
+                                        className="author-initials" 
+                                        data-comment-id={comment.id}
+                                        style={{ display: comment.user_profile_image ? 'none' : 'flex' }}
+                                    >
                                         <FaUser />
                                     </div>
                                 </div>
@@ -1224,7 +1229,33 @@ export default function BlogDetail() {
 .social-icon:hover {
     color: #e67e22;
 }
+.footer-brand-social {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
 
+.brand-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.footer-brand-social .social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-brand-social .social-icons a {
+    color: #bdc3c7;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.footer-brand-social .social-icons a:hover {
+    color: #e67e22;
+}
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .engagement-section {
