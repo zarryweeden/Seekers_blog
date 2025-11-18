@@ -330,130 +330,115 @@ export default function BlogDetail() {
                 </div>
 
 <footer className="article-footer">
-    <div className="footer-actions">
-        <div className="engagement-section">
-            <div className="engagement-header">
-                <div className="action-label">Enjoyed this article?</div>
-                <div className="engagement-stats">
-                    <span className="stat-item">
-                        <FaEye /> {post.views}
-                    </span>
-                    <span className="stat-item">
-                        <FaHeart /> {likes}
-                    </span>
-                    <span className="stat-item">
-                        <FaRegComment /> {comments.length}
-                    </span>
-                </div>
-            </div>
-            
-            <div className="engagement-buttons">
-                <button 
-                    className={`engagement-btn like-btn ${isLiked ? 'liked' : ''}`}
-                    onClick={handleLike}
-                >
-                    {isLiked ? <FaHeart /> : <FaRegHeart />}
-                    <span className="btn-text">{isLiked ? 'Liked' : 'Like'}</span>
-                </button>
-                <button 
-                    className={`engagement-btn comment-btn ${showComments ? 'active' : ''}`}
-                    onClick={handleCommentClick}
-                >
-                    <FaRegComment />
-                    <span className="btn-text">Comment</span>
-                </button>
-            </div>
-        </div>
-        
-        <div className="share-section">
-            <div className="share-header">
-                <div className="share-label">Share with others</div>
-            </div>
-            <div className="share-platforms">
-                <button 
-                    className="share-platform facebook" 
-                    onClick={() => shareArticle('facebook')}
-                    aria-label="Share on Facebook"
-                >
-                    <FaFacebook />
-                    <span>Facebook</span>
-                </button>
-                <button 
-                    className="share-platform twitter" 
-                    onClick={() => shareArticle('twitter')}
-                    aria-label="Share on Twitter"
-                >
-                    <FaTwitter />
-                    <span>Twitter</span>
-                </button>
-                <button 
-                    className="share-platform whatsapp" 
-                    onClick={() => shareArticle('whatsapp')}
-                    aria-label="Share on WhatsApp"
-                >
-                    <FaWhatsapp />
-                    <span>WhatsApp</span>
-                </button>
-                <button 
-                    className="share-platform copy" 
-                    onClick={() => shareArticle('copy')}
-                    aria-label="Copy link"
-                >
-                    <FaLink />
-                    <span>{copied ? 'Copied!' : 'Copy Link'}</span>
-                </button>
-            </div>
+    {/* Social Share Section - Moved to top */}
+    <div className="social-share-section">
+        <div className="share-label">Share this article</div>
+        <div className="social-share-buttons">
+            <button 
+                className="social-share-btn facebook" 
+                onClick={() => shareArticle('facebook')}
+                aria-label="Share on Facebook"
+            >
+                <FaFacebook />
+            </button>
+            <button 
+                className="social-share-btn twitter" 
+                onClick={() => shareArticle('twitter')}
+                aria-label="Share on Twitter"
+            >
+                <FaTwitter />
+            </button>
+            <button 
+                className="social-share-btn whatsapp" 
+                onClick={() => shareArticle('whatsapp')}
+                aria-label="Share on WhatsApp"
+            >
+                <FaWhatsapp />
+            </button>
+            <button 
+                className="social-share-btn copy" 
+                onClick={() => shareArticle('copy')}
+                aria-label="Copy link"
+            >
+                <FaLink />
+                {copied && <span className="copy-tooltip">Link copied!</span>}
+            </button>
         </div>
     </div>
 
-    {/* Comments Section */}
+    {/* Engagement Section */}
+    <div className="engagement-section">
+        <div className="engagement-header">
+            <div className="action-label">Found this helpful?</div>
+            <div className="engagement-stats">
+                <span className="stat-item">
+                    <FaEye /> {post.views} views
+                </span>
+                <span className="stat-item">
+                    <FaHeart /> {likes} likes
+                </span>
+                <span className="stat-item">
+                    <FaRegComment /> {comments.length} comments
+                </span>
+            </div>
+        </div>
+        
+        <div className="engagement-buttons">
+            <button 
+                className={`action-btn like-btn ${isLiked ? 'liked' : ''}`}
+                onClick={handleLike}
+            >
+                {isLiked ? <FaHeart /> : <FaRegHeart />}
+                {isLiked ? 'Liked' : 'Like'}
+            </button>
+            <button 
+                className={`action-btn comment-btn ${showComments ? 'active' : ''}`}
+                onClick={handleCommentClick}
+            >
+                <FaRegComment />
+                Comment
+            </button>
+        </div>
+    </div>
+
+    {/* Comments Section - Appears below when comment button is clicked */}
     {showComments && (
         <div className="comments-section">
             <div className="comments-header">
-                <div className="comments-title">
-                    <h3>Community Discussion</h3>
-                    <span className="comments-count">({comments.length})</span>
-                </div>
-                <p className="comments-subtitle">Join the conversation</p>
+                <h3>Comments ({comments.length})</h3>
+                <p>Join the conversation</p>
             </div>
             
             {/* Add Comment Form */}
             <div className="add-comment-form">
-                <div className="comment-input-container">
-                    <textarea
-                        ref={commentInputRef}
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="What are your thoughts on this article?..."
-                        className="comment-input"
-                        rows="4"
-                    />
-                    <div className="input-char-count">
+                <textarea
+                    ref={commentInputRef}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Share your thoughts on this article..."
+                    className="comment-input"
+                    rows="4"
+                />
+                <div className="comment-form-footer">
+                    <div className="char-count">
                         {newComment.length}/500
                     </div>
-                </div>
-                <div className="comment-actions">
-                    <button 
-                        onClick={() => setShowComments(false)}
-                        className="cancel-btn"
-                    >
-                        Cancel
-                    </button>
-                    <button 
-                        onClick={handleAddComment}
-                        disabled={!newComment.trim() || commentLoading || newComment.length > 500}
-                        className="submit-comment-btn"
-                    >
-                        {commentLoading ? (
-                            <>
-                                <div className="loading-dots"></div>
-                                Posting...
-                            </>
-                        ) : (
-                            'Post Comment'
-                        )}
-                    </button>
+                    <div className="comment-actions">
+                        <button 
+                            onClick={() => setShowComments(false)}
+                            className="cancel-btn"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            onClick={handleAddComment}
+                            disabled={!newComment.trim() || commentLoading || newComment.length > 500}
+                            className="submit-comment-btn"
+                        >
+                            {commentLoading ? 'Posting...' : 'Post Comment'}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -461,54 +446,60 @@ export default function BlogDetail() {
             <div className="comments-list">
                 {comments.length === 0 ? (
                     <div className="no-comments">
-                        <div className="no-comments-icon">
-                            <FaRegComment />
-                        </div>
+                        <FaRegComment className="no-comments-icon" />
                         <h4>No comments yet</h4>
-                        <p>Be the first to share your insights and start the discussion!</p>
+                        <p>Be the first to share your thoughts!</p>
                     </div>
                 ) : (
-                    <div className="comments-grid">
-                        {comments.map((comment) => (
-                            <div key={comment.id} className="comment-card">
-                                <div className="comment-header">
-                                    <div className="comment-author">
-                                        <div className="author-avatar">
-                                            <FaUser />
-                                        </div>
-                                        <div className="author-info">
-                                            <span className="author-name">
-                                                {comment.user_first_name && comment.user_last_name 
-                                                    ? `${comment.user_first_name} ${comment.user_last_name}`
-                                                    : 'Anonymous Reader'
-                                                }
-                                            </span>
-                                            <span className="comment-date">
-                                                {formatDateTime(comment.created_at)}
-                                            </span>
-                                        </div>
+                    comments.map((comment) => (
+                        <div key={comment.id} className="comment-item">
+                            <div className="comment-header">
+                                <div className="comment-author">
+                                    <div className="author-avatar">
+                                        <FaUser />
+                                    </div>
+                                    <div className="author-info">
+                                        <span className="author-name">
+                                            {comment.user_first_name && comment.user_last_name 
+                                                ? `${comment.user_first_name} ${comment.user_last_name}`
+                                                : 'Anonymous Reader'
+                                            }
+                                        </span>
+                                        <span className="comment-date">
+                                            {formatDateTime(comment.created_at)}
+                                        </span>
                                     </div>
                                 </div>
-                                <div className="comment-content">
-                                    {comment.content}
-                                </div>
                             </div>
-                        ))}
-                    </div>
+                            <div className="comment-content">
+                                {comment.content}
+                            </div>
+                        </div>
+                    ))
                 )}
             </div>
         </div>
     )}
-    
+
+    {/* Navigation Section - Social icons on left, buttons on right */}
     <div className="navigation-section">
-        <button onClick={() => navigate(-1)} className="nav-btn secondary">
-            <FaArrowLeft />
-            <span>Back to Articles</span>
-        </button>
-        <Link to="/blogs" className="nav-btn primary">
-            <span>Explore More Content</span>
-            <FaArrowRight />
-        </Link>
+        <div className="social-icons">
+            <a href="#" aria-label="Instagram"><FaInstagram /></a>
+            <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
+            <a href="#" aria-label="Facebook"><FaFacebook /></a>
+            <a href="#" aria-label="TikTok"><FaTiktok /></a>
+        </div>
+        
+        <div className="navigation-buttons">
+            <button onClick={() => navigate(-1)} className="nav-btn back-btn">
+                <FaArrowLeft />
+                <span>Back to Articles</span>
+            </button>
+            <Link to="/blogs" className="nav-btn explore-btn">
+                <span>Explore More</span>
+                <FaArrowRight />
+            </Link>
+        </div>
     </div>
 </footer>
             </article>
@@ -585,289 +576,357 @@ export default function BlogDetail() {
   </div>
 </div>
 
-            <style jsx>{`
-                .blog-detail-page {
-                    min-height: 100vh;
-                    background: #ffffff;
-                }
+<style jsx>{`
+    .blog-detail-page {
+        min-height: 100vh;
+        background: #ffffff;
+    }
 
-                .loading-container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 50vh;
-                    padding: 2rem;
-                }
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 50vh;
+        padding: 2rem;
+    }
 
-                .loading-spinner {
-                    width: 50px;
-                    height: 50px;
-                    border: 4px solid #f3f3f3;
-                    border-top: 4px solid #e67e22;
-                    border-radius: 50%;
-                    animation: spin 1s linear infinite;
-                    margin-bottom: 1rem;
-                }
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #e67e22;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
 
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
-                .error-container {
-                    text-align: center;
-                    padding: 4rem 2rem;
-                    max-width: 500px;
-                    margin: 0 auto;
-                }
+    .error-container {
+        text-align: center;
+        padding: 4rem 2rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
 
-                .error-container h2 {
-                    color: #2c3e50;
-                    margin-bottom: 1rem;
-                }
+    .error-container h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
 
-                .error-container p {
-                    color: #7f8c8d;
-                    margin-bottom: 2rem;
-                }
+    .error-container p {
+        color: #7f8c8d;
+        margin-bottom: 2rem;
+    }
 
-                .modern-btn {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.75rem 1.5rem;
-                    background: #e67e22;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 25px;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                }
+    .modern-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #e67e22;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
 
-                .modern-btn:hover {
-                    background: #d35400;
-                    transform: translateY(-2px);
-                }
+    .modern-btn:hover {
+        background: #d35400;
+        transform: translateY(-2px);
+    }
 
-                /* Navigation */
-                .nav-bar {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 1rem 2rem;
-                    background: white;
-                    border-bottom: 1px solid #e9ecef;
-                }
+    /* Navigation */
+    .nav-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+    }
 
-                .desktop-nav {
-                    display: flex;
-                    gap: 2rem;
-                }
+    .desktop-nav {
+        display: flex;
+        gap: 2rem;
+    }
 
-                .nav-item {
-                    color: #2c3e50;
-                    text-decoration: none;
-                    font-weight: 500;
-                    transition: color 0.3s ease;
-                }
+    .nav-item {
+        color: #2c3e50;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-                .nav-item:hover {
-                    color: #e67e22;
-                }
+    .nav-item:hover {
+        color: #e67e22;
+    }
 
-                /* Blog Content */
-                .blog-detail-container {
-                    max-width: 800px;
-                    margin: 0 auto;
-                    padding: 2rem 1rem;
-                }
+    /* Blog Content */
+    .blog-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
 
-                .blog-breadcrumb {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    margin-bottom: 2rem;
-                    font-size: 0.9rem;
-                    color: #7f8c8d;
-                }
+    .blog-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
 
-                .breadcrumb-link {
-                    background: none;
-                    border: none;
-                    color: #e67e22;
-                    cursor: pointer;
-                    text-decoration: underline;
-                }
+    .breadcrumb-link {
+        background: none;
+        border: none;
+        color: #e67e22;
+        cursor: pointer;
+        text-decoration: underline;
+    }
 
-                .breadcrumb-separator {
-                    color: #bdc3c7;
-                }
+    .breadcrumb-separator {
+        color: #bdc3c7;
+    }
 
-                .breadcrumb-current {
-                    color: #2c3e50;
-                    font-weight: 500;
-                }
+    .breadcrumb-current {
+        color: #2c3e50;
+        font-weight: 500;
+    }
 
-                .blog-header {
-                    margin-bottom: 2rem;
-                }
+    .blog-header {
+        margin-bottom: 2rem;
+    }
 
-                .blog-meta-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 1rem;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                }
+    .blog-meta-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 
-                .category-badge {
-                    background: #e67e22;
-                    color: white;
-                    padding: 0.25rem 0.75rem;
-                    border-radius: 15px;
-                    font-size: 0.8rem;
-                    font-weight: 600;
-                }
+    .category-badge {
+        background: #e67e22;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
 
-                .meta-stats {
-                    display: flex;
-                    gap: 1rem;
-                    flex-wrap: wrap;
-                }
+    .meta-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
 
-                .meta-stat {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.25rem;
-                    color: #7f8c8d;
-                    font-size: 0.85rem;
-                }
+    .meta-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #7f8c8d;
+        font-size: 0.85rem;
+    }
 
-                .blog-title {
-                    font-size: 2.5rem;
-                    color: #2c3e50;
-                    margin-bottom: 1rem;
-                    line-height: 1.2;
-                }
+    .blog-title {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
 
-                .blog-excerpt {
-                    font-size: 1.2rem;
-                    color: #7f8c8d;
-                    line-height: 1.6;
-                    margin-bottom: 2rem;
-                    font-style: italic;
-                }
+    .blog-excerpt {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
 
-                /* Author Profile */
-                .author-profile-minimalist {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    margin-top: 2rem;
-                }
+    /* Author Profile */
+    .author-profile-minimalist {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
 
-                .author-avatar-minimalist {
-                    position: relative;
-                    width: 50px;
-                    height: 50px;
-                }
+    .author-avatar-minimalist {
+        position: relative;
+        width: 50px;
+        height: 50px;
+    }
 
-                .author-profile-img {
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 50%;
-                    object-fit: cover;
-                }
+    .author-profile-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
 
-                .author-initials-minimalist {
-                    display: none;
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    background: #e67e22;
-                    color: white;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: 600;
-                    font-size: 0.9rem;
-                }
+    .author-initials-minimalist {
+        display: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #e67e22;
+        color: white;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
 
-                .author-info-minimalist {
-                    display: flex;
-                    flex-direction: column;
-                }
+    .author-info-minimalist {
+        display: flex;
+        flex-direction: column;
+    }
 
-                .author-name-minimalist {
-                    font-weight: 600;
-                    color: #2c3e50;
-                }
+    .author-name-minimalist {
+        font-weight: 600;
+        color: #2c3e50;
+    }
 
-                .author-meta-minimalist {
-                    color: #7f8c8d;
-                    font-size: 0.85rem;
-                }
+    .author-meta-minimalist {
+        color: #7f8c8d;
+        font-size: 0.85rem;
+    }
 
-                /* Featured Image */
-                .featured-image-container {
-                    margin: 2rem 0;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                }
+    /* Featured Image */
+    .featured-image-container {
+        margin: 2rem 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-                .featured-image-content {
-                    width: 100%;
-                    height: auto;
-                    display: block;
-                }
+    .featured-image-content {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
 
-                /* Blog Content */
-                .blog-content {
-                    margin: 3rem 0;
-                }
+    /* Blog Content */
+    .blog-content {
+        margin: 3rem 0;
+    }
 
-                .content-wrapper {
-                    line-height: 1.8;
-                    color: #2c3e50;
-                }
+    .content-wrapper {
+        line-height: 1.8;
+        color: #2c3e50;
+    }
 
-                .content-block {
-                    margin-bottom: 2rem;
-                }
+    .content-block {
+        margin-bottom: 2rem;
+    }
 
-                .content-paragraph {
-                    margin-bottom: 1.5rem;
-                    font-size: 1.1rem;
-                }
+    .content-paragraph {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+    }
 
-                .content-divider {
-                    height: 2px;
-                    background: linear-gradient(90deg, transparent, #e67e22, transparent);
-                    margin: 2rem 0;
-                }
+    .content-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #e67e22, transparent);
+        margin: 2rem 0;
+    }
 
-                /* Article Footer */
-.article-footer {
+    /* NEW ARTICLE FOOTER DESIGN */
+    .article-footer {
         margin-top: 3rem;
         padding-top: 2rem;
         border-top: 1px solid #e9ecef;
     }
 
-    /* Footer Actions */
-    .footer-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+    /* Social Share Section */
+    .social-share-section {
+        text-align: center;
         margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
     }
 
-    .engagement-section, .share-section {
+    .share-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .social-share-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .social-share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border: 2px solid #e9ecef;
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        font-size: 1.2rem;
+    }
+
+    .social-share-btn:hover {
+        transform: translateY(-2px);
+        border-color: #e67e22;
+    }
+
+    .social-share-btn.facebook:hover { background: #1877f2; color: white; border-color: #1877f2; }
+    .social-share-btn.twitter:hover { background: #1da1f2; color: white; border-color: #1da1f2; }
+    .social-share-btn.whatsapp:hover { background: #25d366; color: white; border-color: #25d366; }
+    .social-share-btn.copy:hover { background: #e67e22; color: white; border-color: #e67e22; }
+
+    .copy-tooltip {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2c3e50;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .copy-tooltip::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #2c3e50;
+    }
+
+    /* Engagement Section */
+    .engagement-section {
         background: #f8f9fa;
         padding: 1.5rem;
         border-radius: 12px;
         border: 1px solid #e9ecef;
+        margin-bottom: 2rem;
     }
 
     .engagement-header {
@@ -875,9 +934,11 @@ export default function BlogDetail() {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
-    .action-label, .share-label {
+    .action-label {
         font-weight: 600;
         color: #2c3e50;
         font-size: 1.1rem;
@@ -885,13 +946,14 @@ export default function BlogDetail() {
 
     .engagement-stats {
         display: flex;
-        gap: 1rem;
+        gap: 1.5rem;
+        flex-wrap: wrap;
     }
 
     .stat-item {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
         color: #7f8c8d;
         font-size: 0.9rem;
         font-weight: 500;
@@ -899,14 +961,14 @@ export default function BlogDetail() {
 
     .engagement-buttons {
         display: flex;
-        gap: 0.75rem;
+        gap: 1rem;
     }
 
-    .engagement-btn {
+    .action-btn {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
+        padding: 0.75rem 1.5rem;
         border: 2px solid #e67e22;
         background: white;
         color: #e67e22;
@@ -918,76 +980,20 @@ export default function BlogDetail() {
         justify-content: center;
     }
 
-    .engagement-btn:hover {
+    .action-btn:hover {
         background: #e67e22;
         color: white;
         transform: translateY(-2px);
     }
 
-    .engagement-btn.liked {
+    .action-btn.liked {
         background: #e67e22;
         color: white;
     }
 
-    .engagement-btn.active {
+    .action-btn.active {
         background: #e67e22;
         color: white;
-    }
-
-    .btn-text {
-        font-size: 0.9rem;
-    }
-
-    /* Share Section */
-    .share-header {
-        margin-bottom: 1rem;
-    }
-
-    .share-platforms {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-    }
-
-    .share-platform {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        border: 1px solid #e9ecef;
-        background: white;
-        color: #2c3e50;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
-
-    .share-platform:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .share-platform.facebook:hover { 
-        background: #1877f2; 
-        color: white; 
-        border-color: #1877f2;
-    }
-    .share-platform.twitter:hover { 
-        background: #1da1f2; 
-        color: white; 
-        border-color: #1da1f2;
-    }
-    .share-platform.whatsapp:hover { 
-        background: #25d366; 
-        color: white; 
-        border-color: #25d366;
-    }
-    .share-platform.copy:hover { 
-        background: #e67e22; 
-        color: white; 
-        border-color: #e67e22;
     }
 
     /* Comments Section */
@@ -1004,30 +1010,13 @@ export default function BlogDetail() {
         margin-bottom: 2rem;
     }
 
-    .comments-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .comments-title h3 {
-        margin: 0;
+    .comments-header h3 {
+        margin: 0 0 0.5rem 0;
         color: #2c3e50;
         font-size: 1.5rem;
     }
 
-    .comments-count {
-        background: #e67e22;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    .comments-subtitle {
+    .comments-header p {
         color: #7f8c8d;
         margin: 0;
     }
@@ -1035,11 +1024,6 @@ export default function BlogDetail() {
     /* Add Comment Form */
     .add-comment-form {
         margin-bottom: 2rem;
-    }
-
-    .comment-input-container {
-        position: relative;
-        margin-bottom: 1rem;
     }
 
     .comment-input {
@@ -1052,6 +1036,7 @@ export default function BlogDetail() {
         font-size: 1rem;
         transition: border-color 0.3s ease;
         min-height: 120px;
+        margin-bottom: 1rem;
     }
 
     .comment-input:focus {
@@ -1059,21 +1044,22 @@ export default function BlogDetail() {
         border-color: #e67e22;
     }
 
-    .input-char-count {
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
+    .comment-form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .char-count {
         color: #7f8c8d;
         font-size: 0.8rem;
-        background: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
     }
 
     .comment-actions {
         display: flex;
         gap: 1rem;
-        justify-content: flex-end;
     }
 
     .cancel-btn {
@@ -1101,9 +1087,6 @@ export default function BlogDetail() {
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
     }
 
     .submit-comment-btn:hover:not(:disabled) {
@@ -1117,23 +1100,11 @@ export default function BlogDetail() {
         transform: none;
     }
 
-    .loading-dots {
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: currentColor;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-
     /* Comments List */
     .comments-list {
-        space-y: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
     .no-comments {
@@ -1153,13 +1124,7 @@ export default function BlogDetail() {
         color: #2c3e50;
     }
 
-    .comments-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .comment-card {
+    .comment-item {
         padding: 1.5rem;
         background: white;
         border-radius: 8px;
@@ -1212,11 +1177,33 @@ export default function BlogDetail() {
     /* Navigation Section */
     .navigation-section {
         display: flex;
-        gap: 1rem;
         justify-content: space-between;
+        align-items: center;
         margin-top: 2rem;
         padding-top: 2rem;
         border-top: 1px solid #e9ecef;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .social-icons a {
+        color: #7f8c8d;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+        color: #e67e22;
+    }
+
+    .navigation-buttons {
+        display: flex;
+        gap: 1rem;
     }
 
     .nav-btn {
@@ -1232,8 +1219,6 @@ export default function BlogDetail() {
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 600;
-        flex: 1;
-        justify-content: center;
     }
 
     .nav-btn:hover {
@@ -1242,29 +1227,170 @@ export default function BlogDetail() {
         transform: translateY(-2px);
     }
 
-    .nav-btn.primary {
+    .nav-btn.back-btn {
+        background: white;
+        color: #e67e22;
+    }
+
+    .nav-btn.explore-btn {
         background: #e67e22;
         color: white;
     }
 
-    .nav-btn.primary:hover {
+    .nav-btn.explore-btn:hover {
         background: #d35400;
     }
 
-    .nav-btn.secondary {
-        background: white;
+    /* Footer */
+    .footer-section {
+        background: #2c3e50;
+        color: white;
+        padding: 3rem 1rem 1rem;
+        margin-top: 4rem;
+    }
+
+    .footer-blocks {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-brand-social {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .brand-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .footer-tagline {
+        color: #bdc3c7;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .footer-newsletter {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .newsletter-header h3 {
+        margin: 0 0 0.5rem 0;
+        color: white;
+    }
+
+    .newsletter-header p {
+        color: #bdc3c7;
+        margin: 0;
+    }
+
+    .newsletter-form {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .newsletter-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #34495e;
+        background: #34495e;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .newsletter-input::placeholder {
+        color: #95a5a6;
+    }
+
+    .subscribe-btn {
+        padding: 0.75rem 1rem;
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .subscribe-btn:hover {
+        background: #d35400;
+    }
+
+    .footer-bottom {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 2rem;
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: #34495e;
+        margin-bottom: 1rem;
+    }
+
+    .footer-copyright {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        color: #bdc3c7;
+        font-size: 0.9rem;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
         color: #e67e22;
     }
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
-        .footer-actions {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+        .nav-bar {
+            padding: 1rem;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .engagement-section, .share-section {
-            padding: 1.25rem;
+        .blog-detail-container {
+            padding: 1rem;
+        }
+
+        .blog-title {
+            font-size: 2rem;
+        }
+
+        .blog-meta-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .meta-stats {
+            justify-content: flex-start;
+            width: 100%;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e9ecef;
         }
 
         .engagement-header {
@@ -1282,10 +1408,6 @@ export default function BlogDetail() {
             flex-direction: column;
         }
 
-        .share-platforms {
-            grid-template-columns: 1fr;
-        }
-
         .comments-section {
             padding: 1.5rem;
             margin: 1rem -1rem;
@@ -1294,26 +1416,55 @@ export default function BlogDetail() {
             border-right: none;
         }
 
-        .comment-actions {
+        .comment-form-footer {
             flex-direction: column;
+            align-items: stretch;
+        }
+
+        .comment-actions {
+            justify-content: space-between;
         }
 
         .navigation-section {
             flex-direction: column;
+            text-align: center;
+        }
+
+        .navigation-buttons {
+            flex-direction: column;
+            width: 100%;
         }
 
         .nav-btn {
+            justify-content: center;
+        }
+
+        .footer-blocks {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .footer-copyright {
+            flex-direction: column;
             text-align: center;
+        }
+
+        .footer-links {
+            justify-content: center;
         }
     }
 
     @media (max-width: 480px) {
+        .blog-title {
+            font-size: 1.75rem;
+        }
+
         .article-footer {
             margin-top: 2rem;
             padding-top: 1.5rem;
         }
 
-        .engagement-section, .share-section {
+        .social-share-section, .engagement-section {
             padding: 1rem;
         }
 
@@ -1321,383 +1472,87 @@ export default function BlogDetail() {
             padding: 1rem;
         }
 
-        .comments-title {
-            flex-direction: column;
-            gap: 0.25rem;
+        .social-share-buttons {
+            gap: 0.5rem;
         }
 
-        .comments-title h3 {
-            font-size: 1.25rem;
+        .social-share-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
         }
 
-        .engagement-btn, .share-platform, .nav-btn {
+        .action-btn, .nav-btn {
             padding: 0.75rem 1rem;
             font-size: 0.9rem;
         }
 
-        .btn-text {
-            font-size: 0.85rem;
+        .newsletter-form {
+            flex-direction: column;
+        }
+
+        .subscribe-btn {
+            width: 100%;
         }
     }
 
-    /* High contrast and accessibility */
-    @media (prefers-reduced-motion: reduce) {
-        .engagement-btn, .share-platform, .nav-btn, .submit-comment-btn {
-            transition: none;
-            transform: none;
-        }
-    }
-
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-        .engagement-section, .share-section, .comments-section {
-            background: #2c3e50;
-            border-color: #34495e;
-            color: white;
-        }
-
-        .engagement-btn, .share-platform, .nav-btn.secondary {
-            background: #34495e;
-            color: white;
-            border-color: #e67e22;
-        }
-
-        .comment-input {
-            background: #34495e;
-            border-color: #5d6d7e;
-            color: white;
-        }
-
-        .comment-card {
-            background: #34495e;
-            border-color: #5d6d7e;
-            color: white;
-        }
-    }
-
-                /* Navigation Actions */
-                .navigation-actions {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-top: 2rem;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                }
-
-                .nav-action-btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.75rem 1.5rem;
-                    border: 2px solid #e67e22;
-                    background: white;
-                    color: #e67e22;
-                    text-decoration: none;
-                    border-radius: 25px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    font-weight: 600;
-                }
-
-                .nav-action-btn:hover {
-                    background: #e67e22;
-                    color: white;
-                    transform: translateY(-2px);
-                }
-
-                /* Footer */
-                .footer-section {
-                    background: #2c3e50;
-                    color: white;
-                    padding: 3rem 1rem 1rem;
-                    margin-top: 4rem;
-                }
-
-                .footer-blocks {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 3rem;
-                    margin-bottom: 2rem;
-                }
-
-                .footer-brand-social {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1.5rem;
-                }
-
-                .brand-content {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                }
-
-                .footer-tagline {
-                    color: #bdc3c7;
-                    font-style: italic;
-                    margin: 0;
-                }
-
-                .social-icons {
-                    display: flex;
-                    gap: 1rem;
-                }
-
-                .social-icons a {
-                    color: #bdc3c7;
-                    font-size: 1.2rem;
-                    transition: color 0.3s ease;
-                }
-
-                .social-icons a:hover {
-                    color: #e67e22;
-                }
-
-                .footer-newsletter {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                }
-
-                .newsletter-header h3 {
-                    margin: 0 0 0.5rem 0;
-                    color: white;
-                }
-
-                .newsletter-header p {
-                    color: #bdc3c7;
-                    margin: 0;
-                }
-
-                .newsletter-form {
-                    display: flex;
-                    gap: 0.5rem;
-                }
-
-                .newsletter-input {
-                    flex: 1;
-                    padding: 0.75rem;
-                    border: 1px solid #34495e;
-                    background: #34495e;
-                    color: white;
-                    border-radius: 4px;
-                }
-
-                .newsletter-input::placeholder {
-                    color: #95a5a6;
-                }
-
-                .subscribe-btn {
-                    padding: 0.75rem 1rem;
-                    background: #e67e22;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    transition: background 0.3s ease;
-                }
-
-                .subscribe-btn:hover {
-                    background: #d35400;
-                }
-
-                .footer-bottom {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding-top: 2rem;
-                }
-
-                .footer-divider {
-                    height: 1px;
-                    background: #34495e;
-                    margin-bottom: 1rem;
-                }
-
-                .footer-copyright {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                    color: #bdc3c7;
-                    font-size: 0.9rem;
-                }
-
-                .footer-links {
-                    display: flex;
-                    gap: 1.5rem;
-                }
-
-                .footer-links a {
-                    color: #bdc3c7;
-                    text-decoration: none;
-                    transition: color 0.3s ease;
-                }
-
-                .footer-links a:hover {
-                    color: #e67e22;
-                }
-
-                /* Mobile Responsive */
-                @media (max-width: 768px) {
-                    .nav-bar {
-                        padding: 1rem;
-                        flex-direction: column;
-                        gap: 1rem;
-                    }
-
-                    .blog-detail-container {
-                        padding: 1rem;
-                    }
-
-                    .blog-title {
-                        font-size: 2rem;
-                    }
-
-                    .blog-meta-header {
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-
-                    .meta-stats {
-                        justify-content: flex-start;
-                    width: 100%;
-                    gap: 0.5rem;
-                    font-size: 0.8rem;
-                    flex-wrap: wrap;
-                    margin-top: 0.5rem;
-                    padding-top: 0.5rem;
-                        border-top: 1px solid #e9ecef;
-                    }
-
-                    .footer-actions {
-                        flex-direction: column;
-                        gap: 2rem;
-                    }
-
-                    .action-buttons {
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
-
-                    .action-btn {
-                        justify-content: center;
-                    }
-
-                    .comments-section {
-                        padding: 1rem;
-                        margin: 1rem -1rem;
-                        border-radius: 0;
-                    }
-
-                    .comment-header {
-                        flex-direction: column;
-                        align-items: flex-start;
-                        gap: 0.5rem;
-                    }
-
-                    .navigation-actions {
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
-
-                    .nav-action-btn {
-                        justify-content: center;
-                        text-align: center;
-                    }
-
-                    .footer-blocks {
-                        grid-template-columns: 1fr;
-                        gap: 2rem;
-                    }
-
-                    .footer-copyright {
-                        flex-direction: column;
-                        text-align: center;
-                    }
-
-                    .footer-links {
-                        justify-content: center;
-                    }
-                }
-
-                @media (max-width: 480px) {
-                    .blog-title {
-                        font-size: 1.75rem;
-                    }
-
-                    .social-share-buttons {
-                        justify-content: center;
-                    }
-
-                    .newsletter-form {
-                        flex-direction: column;
-                    }
-
-                    .subscribe-btn {
-                        width: 100%;
-                    }
-                }
-            /* Hamburger Menu Styles */
-.menu-toggle {
-    display: none;
-    flex-direction: column;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    gap: 0.25rem;
-}
-
-.menu-bar {
-    width: 25px;
-    height: 3px;
-    background: #2c3e50;
-    transition: all 0.3s ease;
-}
-
-.menu-toggle.open .menu-bar:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
-
-.menu-toggle.open .menu-bar:nth-child(2) {
-    opacity: 0;
-}
-
-.menu-toggle.open .menu-bar:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
-
-.nav-links {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-top: 1px solid #e9ecef;
-    padding: 1rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.nav-links.show {
-    display: flex;
-}
-
-@media (max-width: 768px) {
+    /* Hamburger Menu Styles */
     .menu-toggle {
+        display: none;
+        flex-direction: column;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .menu-bar {
+        width: 25px;
+        height: 3px;
+        background: #2c3e50;
+        transition: all 0.3s ease;
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid #e9ecef;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.show {
         display: flex;
     }
-    
-    .desktop-nav {
-        display: none;
+
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: flex;
+        }
+        
+        .desktop-nav {
+            display: none;
+        }
     }
-}
-            `}</style>
+`}</style>
         </div>
     );
 }
