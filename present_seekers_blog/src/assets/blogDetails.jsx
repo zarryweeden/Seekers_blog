@@ -16,6 +16,7 @@ export default function BlogDetail() {
     const [newComment, setNewComment] = useState('');
     const [commentLoading, setCommentLoading] = useState(false);
     const commentInputRef = useRef(null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         fetchPost();
@@ -47,6 +48,9 @@ export default function BlogDetail() {
                 alert('Please log in to like posts');
             }
         }
+    };
+    const isActive = (path) => {
+        return window.location.pathname === path;
     };
 
     const handleCommentClick = () => {
@@ -1637,6 +1641,62 @@ export default function BlogDetail() {
                         width: 100%;
                     }
                 }
+            /* Hamburger Menu Styles */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    gap: 0.25rem;
+}
+
+.menu-bar {
+    width: 25px;
+    height: 3px;
+    background: #2c3e50;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle.open .menu-bar:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.open .menu-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.open .menu-bar:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.nav-links.show {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .desktop-nav {
+        display: none;
+    }
+}
             `}</style>
         </div>
     );
