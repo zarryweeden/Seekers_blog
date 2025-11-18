@@ -330,9 +330,12 @@ export default function BlogDetail() {
                 </div>
 
 <footer className="article-footer">
-    {/* Social Share Section - Moved to top */}
+    {/* Social Share Section */}
     <div className="social-share-section">
-        <div className="share-label">Share this article</div>
+        <div className="share-header">
+            <FaShare className="share-icon" />
+            <h3 className="share-title">Share this wisdom</h3>
+        </div>
         <div className="social-share-buttons">
             <button 
                 className="social-share-btn facebook" 
@@ -340,6 +343,7 @@ export default function BlogDetail() {
                 aria-label="Share on Facebook"
             >
                 <FaFacebook />
+                <span className="platform-name">Facebook</span>
             </button>
             <button 
                 className="social-share-btn twitter" 
@@ -347,6 +351,7 @@ export default function BlogDetail() {
                 aria-label="Share on Twitter"
             >
                 <FaTwitter />
+                <span className="platform-name">Twitter</span>
             </button>
             <button 
                 className="social-share-btn whatsapp" 
@@ -354,6 +359,7 @@ export default function BlogDetail() {
                 aria-label="Share on WhatsApp"
             >
                 <FaWhatsapp />
+                <span className="platform-name">WhatsApp</span>
             </button>
             <button 
                 className="social-share-btn copy" 
@@ -361,7 +367,7 @@ export default function BlogDetail() {
                 aria-label="Copy link"
             >
                 <FaLink />
-                {copied && <span className="copy-tooltip">Link copied!</span>}
+                <span className="platform-name">{copied ? 'Copied!' : 'Copy Link'}</span>
             </button>
         </div>
     </div>
@@ -369,134 +375,178 @@ export default function BlogDetail() {
     {/* Engagement Section */}
     <div className="engagement-section">
         <div className="engagement-header">
-            <div className="action-label">Found this helpful?</div>
+            <div className="engagement-title">
+                <span className="engagement-icon">💭</span>
+                <h3>Enjoyed this read?</h3>
+            </div>
             <div className="engagement-stats">
-                <span className="stat-item">
-                    <FaEye /> {post.views} views
-                </span>
-                <span className="stat-item">
-                    <FaHeart /> {likes} likes
-                </span>
-                <span className="stat-item">
-                    <FaRegComment /> {comments.length} comments
-                </span>
+                <div className="stat-item">
+                    <FaEye className="stat-icon" />
+                    <span className="stat-count">{post.views}</span>
+                    <span className="stat-label">Views</span>
+                </div>
+                <div className="stat-item">
+                    <FaHeart className="stat-icon" />
+                    <span className="stat-count">{likes}</span>
+                    <span className="stat-label">Likes</span>
+                </div>
+                <div className="stat-item">
+                    <FaRegComment className="stat-icon" />
+                    <span className="stat-count">{comments.length}</span>
+                    <span className="stat-label">Comments</span>
+                </div>
             </div>
         </div>
         
-        <div className="engagement-buttons">
+        <div className="engagement-actions">
             <button 
-                className={`action-btn like-btn ${isLiked ? 'liked' : ''}`}
+                className={`engage-btn like-btn ${isLiked ? 'liked' : ''}`}
                 onClick={handleLike}
             >
-                {isLiked ? <FaHeart /> : <FaRegHeart />}
-                {isLiked ? 'Liked' : 'Like'}
+                <span className="btn-icon">
+                    {isLiked ? <FaHeart /> : <FaRegHeart />}
+                </span>
+                <span className="btn-text">
+                    {isLiked ? 'Liked' : 'Like this post'}
+                </span>
             </button>
             <button 
-                className={`action-btn comment-btn ${showComments ? 'active' : ''}`}
+                className={`engage-btn comment-btn ${showComments ? 'active' : ''}`}
                 onClick={handleCommentClick}
             >
-                <FaRegComment />
-                Comment
+                <span className="btn-icon">
+                    <FaRegComment />
+                </span>
+                <span className="btn-text">
+                    {showComments ? 'Hide Comments' : 'Join Discussion'}
+                </span>
             </button>
         </div>
     </div>
 
-    {/* Comments Section - Appears below when comment button is clicked */}
+    {/* Comments Section */}
     {showComments && (
         <div className="comments-section">
             <div className="comments-header">
-                <h3>Comments ({comments.length})</h3>
-                <p>Join the conversation</p>
+                <div className="comments-title-section">
+                    <h3>Community Conversation</h3>
+                    <div className="comments-badge">{comments.length}</div>
+                </div>
+                <p className="comments-subtitle">Share your thoughts and insights</p>
             </div>
             
             {/* Add Comment Form */}
             <div className="add-comment-form">
-                <textarea
-                    ref={commentInputRef}
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Share your thoughts on this article..."
-                    className="comment-input"
-                    rows="4"
-                />
-                <div className="comment-form-footer">
-                    <div className="char-count">
-                        {newComment.length}/500
+                <div className="comment-input-wrapper">
+                    <textarea
+                        ref={commentInputRef}
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="What resonated with you? Share your perspective..."
+                        className="comment-input"
+                        rows="4"
+                    />
+                    <div className="input-footer">
+                        <div className="char-counter">
+                            {newComment.length}/500 characters
+                        </div>
                     </div>
-                    <div className="comment-actions">
-                        <button 
-                            onClick={() => setShowComments(false)}
-                            className="cancel-btn"
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            onClick={handleAddComment}
-                            disabled={!newComment.trim() || commentLoading || newComment.length > 500}
-                            className="submit-comment-btn"
-                        >
-                            {commentLoading ? 'Posting...' : 'Post Comment'}
-                        </button>
-                    </div>
+                </div>
+                <div className="form-actions">
+                    <button 
+                        onClick={() => setShowComments(false)}
+                        className="action-btn cancel-btn"
+                    >
+                        Close
+                    </button>
+                    <button 
+                        onClick={handleAddComment}
+                        disabled={!newComment.trim() || commentLoading || newComment.length > 500}
+                        className="action-btn submit-btn"
+                    >
+                        {commentLoading ? (
+                            <>
+                                <div className="loading-spinner-small"></div>
+                                Posting...
+                            </>
+                        ) : (
+                            'Share Thought'
+                        )}
+                    </button>
                 </div>
             </div>
 
             {/* Comments List */}
             <div className="comments-list">
                 {comments.length === 0 ? (
-                    <div className="no-comments">
-                        <FaRegComment className="no-comments-icon" />
+                    <div className="empty-comments">
+                        <div className="empty-icon">
+                            <FaRegComment />
+                        </div>
                         <h4>No comments yet</h4>
-                        <p>Be the first to share your thoughts!</p>
+                        <p>Be the first to share your wisdom and inspire others!</p>
                     </div>
                 ) : (
-                    comments.map((comment) => (
-                        <div key={comment.id} className="comment-item">
-                            <div className="comment-header">
-                                <div className="comment-author">
-                                    <div className="author-avatar">
-                                        <FaUser />
-                                    </div>
-                                    <div className="author-info">
-                                        <span className="author-name">
-                                            {comment.user_first_name && comment.user_last_name 
-                                                ? `${comment.user_first_name} ${comment.user_last_name}`
-                                                : 'Anonymous Reader'
-                                            }
-                                        </span>
-                                        <span className="comment-date">
-                                            {formatDateTime(comment.created_at)}
-                                        </span>
+                    <div className="comments-grid">
+                        {comments.map((comment) => (
+                            <div key={comment.id} className="comment-card">
+                                <div className="comment-header">
+                                    <div className="comment-author">
+                                        <div className="author-avatar">
+                                            <FaUser />
+                                        </div>
+                                        <div className="author-details">
+                                            <span className="author-name">
+                                                {comment.user_first_name && comment.user_last_name 
+                                                    ? `${comment.user_first_name} ${comment.user_last_name}`
+                                                    : 'Thoughtful Reader'
+                                                }
+                                            </span>
+                                            <span className="comment-time">
+                                                {formatDateTime(comment.created_at)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div className="comment-body">
+                                    {comment.content}
+                                </div>
                             </div>
-                            <div className="comment-content">
-                                {comment.content}
-                            </div>
-                        </div>
-                    ))
+                        ))}
+                    </div>
                 )}
             </div>
         </div>
     )}
 
-    {/* Navigation Section - Social icons on left, buttons on right */}
+    {/* Navigation Section */}
     <div className="navigation-section">
-        <div className="social-icons">
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-            <a href="#" aria-label="TikTok"><FaTiktok /></a>
+        <div className="social-connect">
+            <span className="connect-label">Connect with us:</span>
+            <div className="social-links">
+                <a href="#" aria-label="Instagram" className="social-link">
+                    <FaInstagram />
+                </a>
+                <a href="#" aria-label="WhatsApp" className="social-link">
+                    <FaWhatsapp />
+                </a>
+                <a href="#" aria-label="Facebook" className="social-link">
+                    <FaFacebook />
+                </a>
+                <a href="#" aria-label="TikTok" className="social-link">
+                    <FaTiktok />
+                </a>
+            </div>
         </div>
         
-        <div className="navigation-buttons">
-            <button onClick={() => navigate(-1)} className="nav-btn back-btn">
+        <div className="page-navigation">
+            <button onClick={() => navigate(-1)} className="nav-btn prev-btn">
                 <FaArrowLeft />
-                <span>Back to Articles</span>
+                <span>Previous</span>
             </button>
-            <Link to="/blogs" className="nav-btn explore-btn">
-                <span>Explore More</span>
+            <Link to="/blogs" className="nav-btn next-btn">
+                <span>More Articles</span>
                 <FaArrowRight />
             </Link>
         </div>
@@ -839,238 +889,313 @@ export default function BlogDetail() {
         margin: 2rem 0;
     }
 
-    /* NEW ARTICLE FOOTER DESIGN */
+    /* ENHANCED ARTICLE FOOTER DESIGN */
     .article-footer {
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e9ecef;
+        margin-top: 4rem;
+        padding-top: 3rem;
+        border-top: 2px solid #f8f9fa;
     }
 
     /* Social Share Section */
     .social-share-section {
-        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
         margin-bottom: 2rem;
-        padding: 1.5rem;
-        background: #f8f9fa;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
     }
 
-    .share-label {
+    .share-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .share-icon {
+        font-size: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .share-title {
+        margin: 0;
+        font-size: 1.4rem;
         font-weight: 600;
-        color: #2c3e50;
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-        display: block;
+        color: white;
     }
 
     .social-share-buttons {
-        display: flex;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1rem;
-        flex-wrap: wrap;
+        max-width: 600px;
+        margin: 0 auto;
     }
 
     .social-share-btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 50px;
-        height: 50px;
-        border: 2px solid #e9ecef;
-        background: white;
-        border-radius: 50%;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
-        position: relative;
-        font-size: 1.2rem;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
     }
 
     .social-share-btn:hover {
-        transform: translateY(-2px);
-        border-color: #e67e22;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
 
-    .social-share-btn.facebook:hover { background: #1877f2; color: white; border-color: #1877f2; }
-    .social-share-btn.twitter:hover { background: #1da1f2; color: white; border-color: #1da1f2; }
-    .social-share-btn.whatsapp:hover { background: #25d366; color: white; border-color: #25d366; }
-    .social-share-btn.copy:hover { background: #e67e22; color: white; border-color: #e67e22; }
+    .social-share-btn.facebook:hover { background: #1877f2; border-color: #1877f2; }
+    .social-share-btn.twitter:hover { background: #1da1f2; border-color: #1da1f2; }
+    .social-share-btn.whatsapp:hover { background: #25d366; border-color: #25d366; }
+    .social-share-btn.copy:hover { background: #e67e22; border-color: #e67e22; }
 
-    .copy-tooltip {
-        position: absolute;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #2c3e50;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
-
-    .copy-tooltip::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #2c3e50;
+    .platform-name {
+        font-size: 0.9rem;
+        font-weight: 500;
     }
 
     /* Engagement Section */
     .engagement-section {
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        border: 2px solid #f8f9fa;
         margin-bottom: 2rem;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
     }
 
     .engagement-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .engagement-title {
+        display: flex;
+        align-items: center;
         gap: 1rem;
     }
 
-    .action-label {
-        font-weight: 600;
+    .engagement-icon {
+        font-size: 2rem;
+    }
+
+    .engagement-title h3 {
+        margin: 0;
         color: #2c3e50;
-        font-size: 1.1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
     }
 
     .engagement-stats {
         display: flex;
-        gap: 1.5rem;
+        gap: 2rem;
         flex-wrap: wrap;
     }
 
     .stat-item {
         display: flex;
+        flex-direction: column;
         align-items: center;
         gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        min-width: 80px;
+    }
+
+    .stat-icon {
+        color: #e67e22;
+        font-size: 1.2rem;
+    }
+
+    .stat-count {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
         color: #7f8c8d;
-        font-size: 0.9rem;
         font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .engagement-buttons {
-        display: flex;
-        gap: 1rem;
+    .engagement-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
     }
 
-    .action-btn {
+    .engage-btn {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1.25rem 2rem;
         border: 2px solid #e67e22;
         background: white;
         color: #e67e22;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 600;
-        flex: 1;
-        justify-content: center;
+        font-size: 1.1rem;
     }
 
-    .action-btn:hover {
+    .engage-btn:hover {
         background: #e67e22;
         color: white;
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(230, 126, 34, 0.3);
     }
 
-    .action-btn.liked {
+    .engage-btn.liked {
+        background: #e67e22;
+        color: white;
+        box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+    }
+
+    .engage-btn.active {
         background: #e67e22;
         color: white;
     }
 
-    .action-btn.active {
-        background: #e67e22;
-        color: white;
+    .btn-icon {
+        font-size: 1.2rem;
+    }
+
+    .btn-text {
+        font-size: 1rem;
     }
 
     /* Comments Section */
     .comments-section {
         margin-top: 2rem;
-        padding: 2rem;
-        background: #f8f9fa;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 20px;
+        border: 2px solid #f8f9fa;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
     }
 
     .comments-header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
     }
 
-    .comments-header h3 {
-        margin: 0 0 0.5rem 0;
+    .comments-title-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .comments-title-section h3 {
+        margin: 0;
         color: #2c3e50;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+        font-weight: 700;
     }
 
-    .comments-header p {
+    .comments-badge {
+        background: #e67e22;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .comments-subtitle {
         color: #7f8c8d;
         margin: 0;
+        font-size: 1.1rem;
     }
 
     /* Add Comment Form */
     .add-comment-form {
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 16px;
+    }
+
+    .comment-input-wrapper {
+        margin-bottom: 1.5rem;
     }
 
     .comment-input {
         width: 100%;
-        padding: 1rem;
+        padding: 1.25rem;
         border: 2px solid #e9ecef;
-        border-radius: 8px;
+        background: white;
+        border-radius: 12px;
         resize: vertical;
         font-family: inherit;
         font-size: 1rem;
-        transition: border-color 0.3s ease;
-        min-height: 120px;
-        margin-bottom: 1rem;
+        line-height: 1.6;
+        transition: all 0.3s ease;
+        min-height: 140px;
     }
 
     .comment-input:focus {
         outline: none;
         border-color: #e67e22;
+        box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
     }
 
-    .comment-form-footer {
+    .input-footer {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
     }
 
-    .char-count {
+    .char-counter {
         color: #7f8c8d;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 500;
     }
 
-    .comment-actions {
+    .form-actions {
         display: flex;
         gap: 1rem;
+        justify-content: flex-end;
+    }
+
+    .action-btn {
+        padding: 1rem 2rem;
+        border: 2px solid;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 1rem;
     }
 
     .cancel-btn {
-        padding: 0.75rem 1.5rem;
-        border: 2px solid #bdc3c7;
         background: white;
         color: #7f8c8d;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
+        border-color: #bdc3c7;
     }
 
     .cancel-btn:hover {
@@ -1078,26 +1203,35 @@ export default function BlogDetail() {
         color: white;
     }
 
-    .submit-comment-btn {
-        padding: 0.75rem 2rem;
+    .submit-btn {
         background: #e67e22;
         color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
+        border-color: #e67e22;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
-    .submit-comment-btn:hover:not(:disabled) {
+    .submit-btn:hover:not(:disabled) {
         background: #d35400;
+        border-color: #d35400;
         transform: translateY(-2px);
     }
 
-    .submit-comment-btn:disabled {
+    .submit-btn:disabled {
         background: #bdc3c7;
+        border-color: #bdc3c7;
         cursor: not-allowed;
         transform: none;
+    }
+
+    .loading-spinner-small {
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
     }
 
     /* Comments List */
@@ -1107,70 +1241,93 @@ export default function BlogDetail() {
         gap: 1.5rem;
     }
 
-    .no-comments {
+    .empty-comments {
         text-align: center;
         padding: 3rem 2rem;
         color: #7f8c8d;
     }
 
-    .no-comments-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.3;
     }
 
-    .no-comments h4 {
-        margin: 0 0 0.5rem 0;
+    .empty-comments h4 {
+        margin: 0 0 1rem 0;
         color: #2c3e50;
+        font-size: 1.4rem;
     }
 
-    .comment-item {
-        padding: 1.5rem;
+    .empty-comments p {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .comments-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .comment-card {
         background: white;
-        border-radius: 8px;
+        padding: 2rem;
+        border-radius: 16px;
         border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .comment-card:hover {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
     }
 
     .comment-header {
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
     }
 
     .comment-author {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 1rem;
     }
 
     .author-avatar {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
-        background: #e67e22;
+        background: linear-gradient(135deg, #e67e22, #e74c3c);
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
 
-    .author-info {
+    .author-details {
         display: flex;
         flex-direction: column;
     }
 
     .author-name {
-        font-weight: 600;
+        font-weight: 700;
         color: #2c3e50;
+        font-size: 1.1rem;
     }
 
-    .comment-date {
+    .comment-time {
         color: #7f8c8d;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
     }
 
-    .comment-content {
+    .comment-body {
         color: #2c3e50;
-        line-height: 1.6;
+        line-height: 1.7;
+        font-size: 1.05rem;
         white-space: pre-wrap;
     }
 
@@ -1179,29 +1336,50 @@ export default function BlogDetail() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e9ecef;
+        margin-top: 3rem;
+        padding-top: 2.5rem;
+        border-top: 2px solid #f8f9fa;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 2rem;
     }
 
-    .social-icons {
+    .social-connect {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .connect-label {
+        color: #7f8c8d;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .social-links {
         display: flex;
         gap: 1rem;
     }
 
-    .social-icons a {
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background: #f8f9fa;
         color: #7f8c8d;
-        font-size: 1.5rem;
-        transition: color 0.3s ease;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
     }
 
-    .social-icons a:hover {
-        color: #e67e22;
+    .social-link:hover {
+        background: #e67e22;
+        color: white;
+        transform: translateY(-2px);
     }
 
-    .navigation-buttons {
+    .page-navigation {
         display: flex;
         gap: 1rem;
     }
@@ -1209,35 +1387,37 @@ export default function BlogDetail() {
     .nav-btn {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        gap: 0.75rem;
+        padding: 1rem 1.75rem;
         border: 2px solid #e67e22;
         background: white;
         color: #e67e22;
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 600;
+        font-size: 1rem;
     }
 
     .nav-btn:hover {
         background: #e67e22;
         color: white;
         transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
     }
 
-    .nav-btn.back-btn {
+    .prev-btn {
         background: white;
         color: #e67e22;
     }
 
-    .nav-btn.explore-btn {
+    .next-btn {
         background: #e67e22;
         color: white;
     }
 
-    .nav-btn.explore-btn:hover {
+    .next-btn:hover {
         background: #d35400;
     }
 
@@ -1393,44 +1573,52 @@ export default function BlogDetail() {
             border-top: 1px solid #e9ecef;
         }
 
-        .engagement-header {
-            flex-direction: column;
-            align-items: flex-start;
+        .social-share-section {
+            padding: 2rem 1.5rem;
+        }
+
+        .social-share-buttons {
+            grid-template-columns: 1fr;
             gap: 0.75rem;
         }
 
-        .engagement-stats {
-            width: 100%;
-            justify-content: space-between;
+        .engagement-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
         }
 
-        .engagement-buttons {
-            flex-direction: column;
+        .engagement-stats {
+            justify-content: center;
+        }
+
+        .engagement-actions {
+            grid-template-columns: 1fr;
         }
 
         .comments-section {
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             margin: 1rem -1rem;
             border-radius: 0;
-            border-left: none;
-            border-right: none;
         }
 
-        .comment-form-footer {
+        .form-actions {
             flex-direction: column;
-            align-items: stretch;
-        }
-
-        .comment-actions {
-            justify-content: space-between;
         }
 
         .navigation-section {
             flex-direction: column;
             text-align: center;
+            gap: 1.5rem;
         }
 
-        .navigation-buttons {
+        .social-connect {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .page-navigation {
             flex-direction: column;
             width: 100%;
         }
@@ -1460,31 +1648,30 @@ export default function BlogDetail() {
         }
 
         .article-footer {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
         }
 
         .social-share-section, .engagement-section {
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         .comments-section {
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
-        .social-share-buttons {
-            gap: 0.5rem;
+        .engagement-stats {
+            gap: 1rem;
         }
 
-        .social-share-btn {
-            width: 45px;
-            height: 45px;
-            font-size: 1.1rem;
-        }
-
-        .action-btn, .nav-btn {
+        .stat-item {
             padding: 0.75rem 1rem;
-            font-size: 0.9rem;
+            min-width: 70px;
+        }
+
+        .engage-btn, .nav-btn {
+            padding: 1rem 1.5rem;
+            font-size: 0.95rem;
         }
 
         .newsletter-form {
