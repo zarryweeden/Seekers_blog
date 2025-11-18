@@ -330,78 +330,63 @@ export default function BlogDetail() {
                 </div>
 
 <footer className="article-footer">
-    {/* Social Share Section - Moved to top */}
-    <div className="social-share-section">
-        <div className="share-label">Share this article</div>
-        <div className="social-share-buttons">
-            <button 
-                className="social-share-btn facebook" 
-                onClick={() => shareArticle('facebook')}
-                aria-label="Share on Facebook"
-            >
-                <FaFacebook />
-            </button>
-            <button 
-                className="social-share-btn twitter" 
-                onClick={() => shareArticle('twitter')}
-                aria-label="Share on Twitter"
-            >
-                <FaTwitter />
-            </button>
-            <button 
-                className="social-share-btn whatsapp" 
-                onClick={() => shareArticle('whatsapp')}
-                aria-label="Share on WhatsApp"
-            >
-                <FaWhatsapp />
-            </button>
-            <button 
-                className="social-share-btn copy" 
-                onClick={() => shareArticle('copy')}
-                aria-label="Copy link"
-            >
-                <FaLink />
-                {copied && <span className="copy-tooltip">Link copied!</span>}
-            </button>
-        </div>
-    </div>
-
-    {/* Engagement Section */}
+    {/* Engagement Actions - Top Section */}
     <div className="engagement-section">
-        <div className="engagement-header">
-            <div className="action-label">Found this helpful?</div>
-            <div className="engagement-stats">
-                <span className="stat-item">
-                    <FaEye /> {post.views} views
-                </span>
-                <span className="stat-item">
-                    <FaHeart /> {likes} likes
-                </span>
-                <span className="stat-item">
-                    <FaRegComment /> {comments.length} comments
-                </span>
-            </div>
+        <div className="engagement-stats">
+            <span className="stat-item">
+                <FaEye /> {post.views}
+            </span>
+            <span className="stat-item">
+                {isLiked ? <FaHeart /> : <FaRegHeart />} {likes}
+            </span>
+            <span className="stat-item">
+                <FaRegComment /> {comments.length}
+            </span>
         </div>
         
-        <div className="engagement-buttons">
+        <div className="engagement-actions">
             <button 
                 className={`action-btn like-btn ${isLiked ? 'liked' : ''}`}
                 onClick={handleLike}
+                aria-label={isLiked ? 'Unlike post' : 'Like post'}
             >
                 {isLiked ? <FaHeart /> : <FaRegHeart />}
-                {isLiked ? 'Liked' : 'Like'}
+                <span>{isLiked ? 'Liked' : 'Like'}</span>
             </button>
+            
             <button 
                 className={`action-btn comment-btn ${showComments ? 'active' : ''}`}
                 onClick={handleCommentClick}
+                aria-label="Toggle comments"
             >
                 <FaRegComment />
-                Comment
+                <span>Comment</span>
             </button>
+            
+            <div className="share-dropdown">
+                <button className="action-btn share-btn" aria-label="Share options">
+                    <FaShare />
+                    <span>Share</span>
+                </button>
+                <div className="share-menu">
+                    <button onClick={() => shareArticle('facebook')} className="share-option">
+                        <FaFacebook /> Facebook
+                    </button>
+                    <button onClick={() => shareArticle('twitter')} className="share-option">
+                        <FaTwitter /> Twitter
+                    </button>
+                    <button onClick={() => shareArticle('whatsapp')} className="share-option">
+                        <FaWhatsapp /> WhatsApp
+                    </button>
+                    <button onClick={() => shareArticle('copy')} className="share-option">
+                        <FaLink /> {copied ? 'Copied!' : 'Copy Link'}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    {/* Comments Section - Appears below when comment button is clicked */}
+    {/* Comments Section */}
     {showComments && (
         <div className="comments-section">
             <div className="comments-header">
@@ -409,7 +394,6 @@ export default function BlogDetail() {
                 <p>Join the conversation</p>
             </div>
             
-            {/* Add Comment Form */}
             <div className="add-comment-form">
                 <textarea
                     ref={commentInputRef}
@@ -418,23 +402,24 @@ export default function BlogDetail() {
                     onKeyPress={handleKeyPress}
                     placeholder="Share your thoughts on this article..."
                     className="comment-input"
-                    rows="4"
+                    rows="3"
+                    maxLength="500"
                 />
-                <div className="comment-form-footer">
+                <div className="comment-form-actions">
                     <div className="char-count">
                         {newComment.length}/500
                     </div>
-                    <div className="comment-actions">
+                    <div className="form-buttons">
                         <button 
                             onClick={() => setShowComments(false)}
-                            className="cancel-btn"
+                            className="btn-secondary"
                         >
                             Cancel
                         </button>
                         <button 
                             onClick={handleAddComment}
                             disabled={!newComment.trim() || commentLoading || newComment.length > 500}
-                            className="submit-comment-btn"
+                            className="btn-primary"
                         >
                             {commentLoading ? 'Posting...' : 'Post Comment'}
                         </button>
@@ -442,7 +427,6 @@ export default function BlogDetail() {
                 </div>
             </div>
 
-            {/* Comments List */}
             <div className="comments-list">
                 {comments.length === 0 ? (
                     <div className="no-comments">
@@ -453,22 +437,32 @@ export default function BlogDetail() {
                 ) : (
                     comments.map((comment) => (
                         <div key={comment.id} className="comment-item">
-                            <div className="comment-header">
-                                <div className="comment-author">
-                                    <div className="author-avatar">
+                            <div className="comment-author">
+                                <div className="author-avatar">
+                                    {comment.user_profile_image ? (
+                                        <img 
+                                            src={comment.user_profile_image} 
+                                            alt={`${comment.user_first_name} ${comment.user_last_name}`}
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div className="author-initials">
                                         <FaUser />
                                     </div>
-                                    <div className="author-info">
-                                        <span className="author-name">
-                                            {comment.user_first_name && comment.user_last_name 
-                                                ? `${comment.user_first_name} ${comment.user_last_name}`
-                                                : 'Anonymous Reader'
-                                            }
-                                        </span>
-                                        <span className="comment-date">
-                                            {formatDateTime(comment.created_at)}
-                                        </span>
-                                    </div>
+                                </div>
+                                <div className="author-details">
+                                    <span className="author-name">
+                                        {comment.user_first_name && comment.user_last_name 
+                                            ? `${comment.user_first_name} ${comment.user_last_name}`
+                                            : 'Anonymous Reader'
+                                        }
+                                    </span>
+                                    <span className="comment-date">
+                                        {formatDateTime(comment.created_at)}
+                                    </span>
                                 </div>
                             </div>
                             <div className="comment-content">
@@ -478,28 +472,41 @@ export default function BlogDetail() {
                     ))
                 )}
             </div>
-        </div>
+    </div>
     )}
 
-    {/* Navigation Section - Social icons on left, buttons on right */}
-    <div className="navigation-section">
-        <div className="social-icons">
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="WhatsApp"><FaWhatsapp /></a>
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-            <a href="#" aria-label="TikTok"><FaTiktok /></a>
+    {/* Article Navigation */}
+    <div className="article-navigation">
+        <button 
+            onClick={() => navigate(-1)} 
+            className="nav-btn prev-btn"
+        >
+            <FaArrowLeft />
+            <span>Back to Articles</span>
+        </button>
+        
+        <div className="social-links">
+            <span className="social-label">Follow us:</span>
+            <div className="social-icons">
+                <a href="#" aria-label="Instagram" className="social-icon">
+                    <FaInstagram />
+                </a>
+                <a href="#" aria-label="WhatsApp" className="social-icon">
+                    <FaWhatsapp />
+                </a>
+                <a href="#" aria-label="Facebook" className="social-icon">
+                    <FaFacebook />
+                </a>
+                <a href="#" aria-label="TikTok" className="social-icon">
+                    <FaTiktok />
+                </a>
+            </div>
         </div>
         
-        <div className="navigation-buttons">
-            <button onClick={() => navigate(-1)} className="nav-btn back-btn">
-                <FaArrowLeft />
-                <span>Back to Articles</span>
-            </button>
-            <Link to="/blogs" className="nav-btn explore-btn">
-                <span>Explore More</span>
-                <FaArrowRight />
-            </Link>
-        </div>
+        <Link to="/blogs" className="nav-btn next-btn">
+            <span>Explore More</span>
+            <FaArrowRight />
+        </Link>
     </div>
 </footer>
             </article>
@@ -839,407 +846,459 @@ export default function BlogDetail() {
         margin: 2rem 0;
     }
 
-    /* NEW ARTICLE FOOTER DESIGN */
-    .article-footer {
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e9ecef;
-    }
+/* Article Footer */
+.article-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+}
 
-    /* Social Share Section */
-    .social-share-section {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding: 1.5rem;
-        background: #f8f9fa;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
-    }
+/* Engagement Section */
+.engagement-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #f1f3f4;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
-    .share-label {
-        font-weight: 600;
-        color: #2c3e50;
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-        display: block;
-    }
+.engagement-stats {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
 
-    .social-share-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
 
-    .social-share-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        height: 50px;
-        border: 2px solid #e9ecef;
-        background: white;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        font-size: 1.2rem;
-    }
+.engagement-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
 
-    .social-share-btn:hover {
-        transform: translateY(-2px);
-        border-color: #e67e22;
-    }
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #4b5563;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
 
-    .social-share-btn.facebook:hover { background: #1877f2; color: white; border-color: #1877f2; }
-    .social-share-btn.twitter:hover { background: #1da1f2; color: white; border-color: #1da1f2; }
-    .social-share-btn.whatsapp:hover { background: #25d366; color: white; border-color: #25d366; }
-    .social-share-btn.copy:hover { background: #e67e22; color: white; border-color: #e67e22; }
+.action-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+}
 
-    .copy-tooltip {
-        position: absolute;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #2c3e50;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
+.action-btn.liked {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
 
-    .copy-tooltip::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #2c3e50;
-    }
+.action-btn.active {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+    color: #0369a1;
+}
 
-    /* Engagement Section */
+/* Share Dropdown */
+.share-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.share-dropdown:hover .share-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.share-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 10;
+    min-width: 150px;
+}
+
+.share-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: none;
+    color: #4b5563;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.share-option:hover {
+    background: #f3f4f6;
+}
+
+/* Comments Section */
+.comments-section {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.comments-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.comments-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #1f2937;
+    font-size: 1.4rem;
+}
+
+.comments-header p {
+    color: #6b7280;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.add-comment-form {
+    margin-bottom: 2rem;
+}
+
+.comment-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+    background: white;
+    margin-bottom: 1rem;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: #e67e22;
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+.comment-form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.char-count {
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #6b7280;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.btn-primary {
+    padding: 0.6rem 1.5rem;
+    background: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #d35400;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Comments List */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #6b7280;
+}
+
+.no-comments-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.no-comments h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4b5563;
+    font-size: 1.1rem;
+}
+
+.no-comments p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.comment-item {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #f1f3f4;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.author-avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-initials {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e67e22;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+
+.comment-date {
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.comment-content {
+    color: #374151;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+}
+
+/* Article Navigation */
+.article-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #4b5563;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.nav-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.social-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.social-icons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.social-icon {
+    color: #6b7280;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+    padding: 0.5rem;
+}
+
+.social-icon:hover {
+    color: #e67e22;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
     .engagement-section {
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
-        margin-bottom: 2rem;
-    }
-
-    .engagement-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-
-    .action-label {
-        font-weight: 600;
-        color: #2c3e50;
-        font-size: 1.1rem;
-    }
-
-    .engagement-stats {
-        display: flex;
+        flex-direction: column;
+        align-items: stretch;
         gap: 1.5rem;
-        flex-wrap: wrap;
     }
-
-    .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #7f8c8d;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .engagement-buttons {
-        display: flex;
+    
+    .engagement-stats {
+        justify-content: space-around;
         gap: 1rem;
     }
-
+    
+    .engagement-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
     .action-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        border: 2px solid #e67e22;
-        background: white;
-        color: #e67e22;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
         flex: 1;
+        min-width: 100px;
         justify-content: center;
     }
-
-    .action-btn:hover {
-        background: #e67e22;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .action-btn.liked {
-        background: #e67e22;
-        color: white;
-    }
-
-    .action-btn.active {
-        background: #e67e22;
-        color: white;
-    }
-
-    /* Comments Section */
-    .comments-section {
-        margin-top: 2rem;
-        padding: 2rem;
-        background: #f8f9fa;
-        border-radius: 12px;
-        border: 1px solid #e9ecef;
-    }
-
-    .comments-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .comments-header h3 {
-        margin: 0 0 0.5rem 0;
-        color: #2c3e50;
-        font-size: 1.5rem;
-    }
-
-    .comments-header p {
-        color: #7f8c8d;
-        margin: 0;
-    }
-
-    /* Add Comment Form */
-    .add-comment-form {
-        margin-bottom: 2rem;
-    }
-
-    .comment-input {
-        width: 100%;
-        padding: 1rem;
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        resize: vertical;
-        font-family: inherit;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-        min-height: 120px;
-        margin-bottom: 1rem;
-    }
-
-    .comment-input:focus {
-        outline: none;
-        border-color: #e67e22;
-    }
-
-    .comment-form-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-
-    .char-count {
-        color: #7f8c8d;
-        font-size: 0.8rem;
-    }
-
-    .comment-actions {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .cancel-btn {
-        padding: 0.75rem 1.5rem;
-        border: 2px solid #bdc3c7;
-        background: white;
-        color: #7f8c8d;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-    }
-
-    .cancel-btn:hover {
-        background: #bdc3c7;
-        color: white;
-    }
-
-    .submit-comment-btn {
-        padding: 0.75rem 2rem;
-        background: #e67e22;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .submit-comment-btn:hover:not(:disabled) {
-        background: #d35400;
-        transform: translateY(-2px);
-    }
-
-    .submit-comment-btn:disabled {
-        background: #bdc3c7;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    /* Comments List */
-    .comments-list {
-        display: flex;
+    
+    .article-navigation {
         flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .no-comments {
         text-align: center;
-        padding: 3rem 2rem;
-        color: #7f8c8d;
+        gap: 1rem;
     }
-
-    .no-comments-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
+    
+    .nav-btn {
+        width: 100%;
+        justify-content: center;
     }
-
-    .no-comments h4 {
-        margin: 0 0 0.5rem 0;
-        color: #2c3e50;
-    }
-
-    .comment-item {
-        padding: 1.5rem;
-        background: white;
-        border-radius: 8px;
-        border: 1px solid #e9ecef;
-    }
-
-    .comment-header {
-        margin-bottom: 1rem;
-    }
-
-    .comment-author {
-        display: flex;
-        align-items: center;
+    
+    .social-links {
+        flex-direction: column;
         gap: 0.75rem;
     }
-
-    .author-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #e67e22;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
+    
+    .comments-section {
+        padding: 1.5rem;
+        margin: 1rem 0;
     }
+    
+    .comment-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-buttons {
+        justify-content: space-between;
+    }
+}
 
-    .author-info {
-        display: flex;
+@media (max-width: 480px) {
+    .engagement-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .engagement-actions {
         flex-direction: column;
     }
-
-    .author-name {
-        font-weight: 600;
-        color: #2c3e50;
+    
+    .action-btn {
+        width: 100%;
     }
-
-    .comment-date {
-        color: #7f8c8d;
-        font-size: 0.8rem;
+    
+    .share-menu {
+        right: -50px;
+        left: -50px;
     }
-
-    .comment-content {
-        color: #2c3e50;
-        line-height: 1.6;
-        white-space: pre-wrap;
-    }
-
-    /* Navigation Section */
-    .navigation-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e9ecef;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-
-    .social-icons {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .social-icons a {
-        color: #7f8c8d;
-        font-size: 1.5rem;
-        transition: color 0.3s ease;
-    }
-
-    .social-icons a:hover {
-        color: #e67e22;
-    }
-
-    .navigation-buttons {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .nav-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        border: 2px solid #e67e22;
-        background: white;
-        color: #e67e22;
-        text-decoration: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-    }
-
-    .nav-btn:hover {
-        background: #e67e22;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .nav-btn.back-btn {
-        background: white;
-        color: #e67e22;
-    }
-
-    .nav-btn.explore-btn {
-        background: #e67e22;
-        color: white;
-    }
-
-    .nav-btn.explore-btn:hover {
-        background: #d35400;
-    }
+}
 
     /* Footer */
     .footer-section {
