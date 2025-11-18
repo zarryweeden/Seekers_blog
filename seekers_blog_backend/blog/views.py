@@ -66,15 +66,7 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # Add these standalone views for anonymous users (if needed)
-    @api_view(['GET'])
-    def post_comments(request, post_id):
-        try:
-            post = BlogPost.objects.get(id=post_id, published=True)
-            comments = post.comment_set.all().order_by('-created_at')
-            serializer = CommentSerializer(comments, many=True)
-            return Response(serializer.data)
-        except BlogPost.DoesNotExist:
-            return Response({'error': 'Post not found'}, status=404)
+
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -102,6 +94,17 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         featured_posts = BlogPost.objects.filter(published=True, featured=True).order_by('featured_order')[:3]
         serializer = self.get_serializer(featured_posts, many=True)
         return Response(serializer.data)
+    
+
+@api_view(['GET'])
+def post_comments(request, post_id):
+    try:
+        post = BlogPost.objects.get(id=post_id, published=True)
+        comments = post.comment_set.all().order_by('-created_at')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    except BlogPost.DoesNotExist:
+        return Response({'error': 'Post not found'}, status=404)
 
 @csrf_exempt
 def test_image_upload(request):

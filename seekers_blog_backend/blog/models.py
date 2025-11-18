@@ -70,6 +70,8 @@ class BlogPost(models.Model):
         return self.like_set.filter(user=user).exists()
     
 
+    
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
