@@ -379,15 +379,7 @@ export default function BlogDetail() {
                 <span className="count">{likes}</span>
             </button>
             
-            <button 
-                className={`engagement-btn comment-btn`}
-                onClick={handleCommentClick}
-                aria-label="Add comment"
-            >
-                <FaRegComment />
-                <span className="btn-text">Comment</span>
-                <span className="count">{comments.length}</span>
-            </button>
+            {/* Remove the comment button since comments are always visible now */}
         </div>
     </div>
 
@@ -406,93 +398,91 @@ export default function BlogDetail() {
         </button>
     </div>
 
-    {/* Comments Section - Appears below all footer elements */}
-    {showComments && (
-        <div className="comments-section">
-            <div className="comments-header">
-                <h3>Comments ({comments.length})</h3>
-                <p>Join the conversation</p>
-            </div>
-            
-            {/* Add Comment Form */}
-            <div className="add-comment-form">
-                <textarea
-                    ref={commentInputRef}
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Share your thoughts on this article..."
-                    className="comment-input"
-                    rows="4"
-                    maxLength="500"
-                />
-                <div className="comment-form-actions">
-                    <div className="char-count">
-                        {newComment.length}/500
-                    </div>
-                    <button 
-                        onClick={handleAddComment}
-                        disabled={!newComment.trim() || commentLoading || newComment.length > 500}
-                        className="submit-comment-btn"
-                    >
-                        {commentLoading ? 'Posting...' : 'Post Comment'}
-                    </button>
+    {/* Comments Section - ALWAYS VISIBLE and full width */}
+    <div className="comments-section">
+        <div className="comments-header">
+            <h3>Comments ({comments.length})</h3>
+            <p>Join the conversation</p>
+        </div>
+        
+        {/* Add Comment Form */}
+        <div className="add-comment-form">
+            <textarea
+                ref={commentInputRef}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Share your thoughts on this article..."
+                className="comment-input"
+                rows="4"
+                maxLength="500"
+            />
+            <div className="comment-form-actions">
+                <div className="char-count">
+                    {newComment.length}/500
                 </div>
-            </div>
-
-            {/* Comments List */}
-            <div className="comments-list">
-                {comments.length === 0 ? (
-                    <div className="no-comments">
-                        <FaRegComment className="no-comments-icon" />
-                        <h4>No comments yet</h4>
-                        <p>Be the first to share your thoughts!</p>
-                    </div>
-                ) : (
-                    comments.map((comment) => (
-                        <div key={comment.id} className="comment-item">
-                            <div className="comment-author">
-                                <div className="author-avatar">
-                                    {comment.user_profile_image ? (
-                                        <img 
-                                            src={comment.user_profile_image} 
-                                            alt={`${comment.user_first_name} ${comment.user_last_name}`}
-                                            onError={(e) => {
-                                                e.target.style.display = 'none';
-                                                const initials = document.querySelector(`.author-initials[data-comment-id="${comment.id}"]`);
-                                                if (initials) initials.style.display = 'flex';
-                                            }}
-                                        />
-                                    ) : null}
-                                    <div 
-                                        className="author-initials" 
-                                        data-comment-id={comment.id}
-                                        style={{ display: comment.user_profile_image ? 'none' : 'flex' }}
-                                    >
-                                        <FaUser />
-                                    </div>
-                                </div>
-                                <div className="author-details">
-                                    <span className="author-name">
-                                        {comment.user_first_name && comment.user_last_name 
-                                            ? `${comment.user_first_name} ${comment.user_last_name}`
-                                            : 'Anonymous Reader'
-                                        }
-                                    </span>
-                                    <span className="comment-date">
-                                        {formatDateTime(comment.created_at)}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="comment-content">
-                                {comment.content}
-                            </div>
-                        </div>
-                    ))
-                )}
+                <button 
+                    onClick={handleAddComment}
+                    disabled={!newComment.trim() || commentLoading || newComment.length > 500}
+                    className="submit-comment-btn"
+                >
+                    {commentLoading ? 'Posting...' : 'Post Comment'}
+                </button>
             </div>
         </div>
-    )}
+
+        {/* Comments List */}
+        <div className="comments-list">
+            {comments.length === 0 ? (
+                <div className="no-comments">
+                    <FaRegComment className="no-comments-icon" />
+                    <h4>No comments yet</h4>
+                    <p>Be the first to share your thoughts!</p>
+                </div>
+            ) : (
+                comments.map((comment) => (
+                    <div key={comment.id} className="comment-item">
+                        <div className="comment-author">
+                            <div className="author-avatar">
+                                {comment.user_profile_image ? (
+                                    <img 
+                                        src={comment.user_profile_image} 
+                                        alt={`${comment.user_first_name} ${comment.user_last_name}`}
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            const initials = document.querySelector(`.author-initials[data-comment-id="${comment.id}"]`);
+                                            if (initials) initials.style.display = 'flex';
+                                        }}
+                                    />
+                                ) : null}
+                                <div 
+                                    className="author-initials" 
+                                    data-comment-id={comment.id}
+                                    style={{ display: comment.user_profile_image ? 'none' : 'flex' }}
+                                >
+                                    <FaUser />
+                                </div>
+                            </div>
+                            <div className="author-details">
+                                <span className="author-name">
+                                    {comment.user_first_name && comment.user_last_name 
+                                        ? `${comment.user_first_name} ${comment.user_last_name}`
+                                        : 'Anonymous Reader'
+                                    }
+                                </span>
+                                <span className="comment-date">
+                                    {formatDateTime(comment.created_at)}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="comment-content">
+                            {comment.content}
+                        </div>
+                    </div>
+                ))
+            )}
+        </div>
+    </div>
 </footer>
             </article>
 
@@ -1016,6 +1006,8 @@ export default function BlogDetail() {
         background: #f8f9fa;
         border-radius: 12px;
         border: 1px solid #e9ecef;
+        width: 100%; 
+        box-sizing: border-box;
     }
 
     .comments-header {
