@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { blogAPI } from "../services/api";
+import { useLocation } from "react-router-dom";
 import { FaArrowLeft, FaShare, FaFacebook, FaTwitter, FaLink, FaCalendar, FaEye, FaInstagram, FaWhatsapp, FaArrowRight, FaTiktok, FaUser, FaBookReader, FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
 
 export default function BlogDetail() {
@@ -17,6 +18,8 @@ export default function BlogDetail() {
     const [commentLoading, setCommentLoading] = useState(false);
     const commentInputRef = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const location = useLocation();
+    
 
     useEffect(() => {
         fetchPost();
@@ -49,9 +52,7 @@ export default function BlogDetail() {
             }
         }
     };
-    const isActive = (path) => {
-        return window.location.pathname === path;
-    };
+    const isActive = (path) => location.pathname === path;
 
     const handleCommentClick = () => {
         setShowComments(!showComments);
