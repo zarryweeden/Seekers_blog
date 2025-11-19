@@ -406,100 +406,90 @@ export default function BlogDetail() {
         </button>
     </div>
 
-    {/* Comment Popup Modal */}
+    {/* Comments Section - Appears below all footer elements */}
     {showComments && (
-        <div className="comment-modal-overlay">
-            <div className="comment-modal">
-                <div className="modal-header">
-                    <h3>Comments ({comments.length})</h3>
+        <div className="comments-section">
+            <div className="comments-header">
+                <h3>Comments ({comments.length})</h3>
+                <p>Join the conversation</p>
+            </div>
+            
+            {/* Add Comment Form */}
+            <div className="add-comment-form">
+                <textarea
+                    ref={commentInputRef}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Share your thoughts on this article..."
+                    className="comment-input"
+                    rows="4"
+                    maxLength="500"
+                />
+                <div className="comment-form-actions">
+                    <div className="char-count">
+                        {newComment.length}/500
+                    </div>
                     <button 
-                        className="close-btn"
-                        onClick={() => setShowComments(false)}
-                        aria-label="Close comments"
+                        onClick={handleAddComment}
+                        disabled={!newComment.trim() || commentLoading || newComment.length > 500}
+                        className="submit-comment-btn"
                     >
-                        ×
+                        {commentLoading ? 'Posting...' : 'Post Comment'}
                     </button>
                 </div>
-                
-                <div className="modal-content">
-                    {/* Add Comment Form */}
-                    <div className="add-comment-form">
-                        <textarea
-                            ref={commentInputRef}
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Share your thoughts on this article..."
-                            className="comment-input"
-                            rows="4"
-                            maxLength="500"
-                        />
-                        <div className="comment-form-actions">
-                            <div className="char-count">
-                                {newComment.length}/500
-                            </div>
-                            <button 
-                                onClick={handleAddComment}
-                                disabled={!newComment.trim() || commentLoading || newComment.length > 500}
-                                className="submit-comment-btn"
-                            >
-                                {commentLoading ? 'Posting...' : 'Post Comment'}
-                            </button>
-                        </div>
-                    </div>
+            </div>
 
-                    {/* Comments List */}
-                    <div className="comments-list">
-                        {comments.length === 0 ? (
-                            <div className="no-comments">
-                                <FaRegComment className="no-comments-icon" />
-                                <h4>No comments yet</h4>
-                                <p>Be the first to share your thoughts!</p>
-                            </div>
-                        ) : (
-                            comments.map((comment) => (
-                                <div key={comment.id} className="comment-item">
-                                    <div className="comment-author">
-                                        <div className="author-avatar">
-                                            {comment.user_profile_image ? (
-                                                <img 
-                                                    src={comment.user_profile_image} 
-                                                    alt={`${comment.user_first_name} ${comment.user_last_name}`}
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        const initials = document.querySelector(`.author-initials[data-comment-id="${comment.id}"]`);
-                                                        if (initials) initials.style.display = 'flex';
-                                                    }}
-                                                />
-                                            ) : null}
-                                            <div 
-                                                className="author-initials" 
-                                                data-comment-id={comment.id}
-                                                style={{ display: comment.user_profile_image ? 'none' : 'flex' }}
-                                            >
-                                                <FaUser />
-                                            </div>
-                                        </div>
-                                        <div className="author-details">
-                                            <span className="author-name">
-                                                {comment.user_first_name && comment.user_last_name 
-                                                    ? `${comment.user_first_name} ${comment.user_last_name}`
-                                                    : 'Anonymous Reader'
-                                                }
-                                            </span>
-                                            <span className="comment-date">
-                                                {formatDateTime(comment.created_at)}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="comment-content">
-                                        {comment.content}
+            {/* Comments List */}
+            <div className="comments-list">
+                {comments.length === 0 ? (
+                    <div className="no-comments">
+                        <FaRegComment className="no-comments-icon" />
+                        <h4>No comments yet</h4>
+                        <p>Be the first to share your thoughts!</p>
+                    </div>
+                ) : (
+                    comments.map((comment) => (
+                        <div key={comment.id} className="comment-item">
+                            <div className="comment-author">
+                                <div className="author-avatar">
+                                    {comment.user_profile_image ? (
+                                        <img 
+                                            src={comment.user_profile_image} 
+                                            alt={`${comment.user_first_name} ${comment.user_last_name}`}
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                const initials = document.querySelector(`.author-initials[data-comment-id="${comment.id}"]`);
+                                                if (initials) initials.style.display = 'flex';
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div 
+                                        className="author-initials" 
+                                        data-comment-id={comment.id}
+                                        style={{ display: comment.user_profile_image ? 'none' : 'flex' }}
+                                    >
+                                        <FaUser />
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
-                </div>
+                                <div className="author-details">
+                                    <span className="author-name">
+                                        {comment.user_first_name && comment.user_last_name 
+                                            ? `${comment.user_first_name} ${comment.user_last_name}`
+                                            : 'Anonymous Reader'
+                                        }
+                                    </span>
+                                    <span className="comment-date">
+                                        {formatDateTime(comment.created_at)}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="comment-content">
+                                {comment.content}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     )}
@@ -842,462 +832,358 @@ export default function BlogDetail() {
     }
 
     /* Article Footer */
-/* Article Footer */
-.article-footer {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e9ecef;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-/* Social Share Section */
-.social-share-section {
-    text-align: center;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    border: 1px solid #e9ecef;
-}
-
-.share-label {
-    font-weight: 600;
-    color: #2c3e50;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    display: block;
-}
-
-.social-share-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.social-share-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.2rem;
-    color: white;
-    position: relative;
-}
-
-.social-share-btn.facebook { background: #1877f2; }
-.social-share-btn.twitter { background: #1da1f2; }
-.social-share-btn.whatsapp { background: #25d366; }
-.social-share-btn.copy { background: #6c757d; }
-
-.social-share-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.copy-tooltip {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2c3e50;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-}
-
-.copy-tooltip::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #2c3e50;
-}
-
-/* Engagement Section */
-.engagement-section {
-    display: flex;
-    justify-content: center;
-}
-
-.engagement-buttons {
-    display: flex;
-    gap: 1rem;
-}
-
-.engagement-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid #e67e22;
-    background: white;
-    color: #e67e22;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.engagement-btn:hover {
-    background: #e67e22;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.engagement-btn.liked {
-    background: #e67e22;
-    color: white;
-}
-
-.btn-text {
-    font-weight: 600;
-}
-
-.count {
-    background: rgba(230, 126, 34, 0.1);
-    color: #e67e22;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 24px;
-    text-align: center;
-}
-
-.engagement-btn.liked .count {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-/* Navigation Buttons */
-.navigation-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid #e67e22;
-    background: white;
-    color: #e67e22;
-    text-decoration: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-}
-
-.nav-btn:hover {
-    background: #e67e22;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.nav-btn.explore-btn {
-    background: #e67e22;
-    color: white;
-}
-
-.nav-btn.explore-btn:hover {
-    background: #d35400;
-}
-
-/* Comment Modal */
-.comment-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
-}
-
-.comment-modal {
-    background: white;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.modal-header h3 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.4rem;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #7f8c8d;
-    padding: 0.5rem;
-    line-height: 1;
-}
-
-.close-btn:hover {
-    color: #2c3e50;
-}
-
-.modal-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-}
-
-/* Add Comment Form in Modal */
-.add-comment-form {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.comment-input {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    background: white;
-    margin-bottom: 1rem;
-}
-
-.comment-input:focus {
-    outline: none;
-    border-color: #e67e22;
-}
-
-.comment-form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.char-count {
-    color: #7f8c8d;
-    font-size: 0.85rem;
-}
-
-.submit-comment-btn {
-    padding: 0.75rem 1.5rem;
-    background: #e67e22;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.submit-comment-btn:hover:not(:disabled) {
-    background: #d35400;
-    transform: translateY(-1px);
-}
-
-.submit-comment-btn:disabled {
-    background: #bdc3c7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Comments List in Modal */
-.comments-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.no-comments {
-    text-align: center;
-    padding: 2rem;
-    color: #7f8c8d;
-}
-
-.no-comments-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.no-comments h4 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
-}
-
-.no-comments p {
-    margin: 0;
-}
-
-.comment-item {
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-
-.comment-author {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.author-avatar {
-    position: relative;
-    width: 40px;
-    height: 40px;
-}
-
-.author-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.author-initials {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e67e22;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-}
-
-.author-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.author-name {
-    font-weight: 600;
-    color: #2c3e50;
-    font-size: 0.95rem;
-}
-
-.comment-date {
-    color: #7f8c8d;
-    font-size: 0.8rem;
-}
-
-.comment-content {
-    color: #2c3e50;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    font-size: 0.95rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .social-share-buttons {
-        gap: 0.5rem;
-    }
-    
-    .social-share-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
-    }
-    
-    .engagement-buttons {
-        flex-direction: column;
-        width: 100%;
-        max-width: 200px;
-    }
-    
-    .navigation-buttons {
-        justify-content: center;
-    }
-    
-    .nav-btn {
-        flex: 1;
-        justify-content: center;
-        min-width: 140px;
-    }
-    
-    .comment-modal {
-        margin: 1rem;
-        max-height: 90vh;
-    }
-    
-    .modal-content {
-        padding: 1rem;
-    }
-    
-    .comment-form-actions {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    .submit-comment-btn {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
     .article-footer {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* Social Share Section */
+    .social-share-section {
+        text-align: center;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
+
+    .share-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .social-share-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .social-share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
+        color: white;
+        position: relative;
+    }
+
+    .social-share-btn.facebook { background: #1877f2; }
+    .social-share-btn.twitter { background: #1da1f2; }
+    .social-share-btn.whatsapp { background: #25d366; }
+    .social-share-btn.copy { background: #6c757d; }
+
+    .social-share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .copy-tooltip {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2c3e50;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .copy-tooltip::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #2c3e50;
+    }
+
+    /* Engagement Section */
+    .engagement-section {
+        display: flex;
+        justify-content: center;
+    }
+
+    .engagement-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .engagement-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e67e22;
+        background: white;
+        color: #e67e22;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .engagement-btn:hover {
+        background: #e67e22;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .engagement-btn.liked {
+        background: #e67e22;
+        color: white;
+    }
+
+    .btn-text {
+        font-weight: 600;
+    }
+
+    .count {
+        background: rgba(230, 126, 34, 0.1);
+        color: #e67e22;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        min-width: 24px;
+        text-align: center;
+    }
+
+    .engagement-btn.liked .count {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    /* Navigation Buttons */
+    .navigation-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e67e22;
+        background: white;
+        color: #e67e22;
+        text-decoration: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .nav-btn:hover {
+        background: #e67e22;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .nav-btn.explore-btn {
+        background: #e67e22;
+        color: white;
+    }
+
+    .nav-btn.explore-btn:hover {
+        background: #d35400;
+    }
+
+    /* Comments Section - Below all footer elements */
+    .comments-section {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+    }
+
+    .comments-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .comments-header h3 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+        font-size: 1.5rem;
+    }
+
+    .comments-header p {
+        color: #7f8c8d;
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    /* Add Comment Form */
+    .add-comment-form {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .comment-input {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        background: white;
+        margin-bottom: 1rem;
+    }
+
+    .comment-input:focus {
+        outline: none;
+        border-color: #e67e22;
+    }
+
+    .comment-form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .char-count {
+        color: #7f8c8d;
+        font-size: 0.85rem;
+    }
+
+    .submit-comment-btn {
+        padding: 0.75rem 1.5rem;
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .submit-comment-btn:hover:not(:disabled) {
+        background: #d35400;
+        transform: translateY(-1px);
+    }
+
+    .submit-comment-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Comments List */
+    .comments-list {
+        display: flex;
+        flex-direction: column;
         gap: 1.5rem;
     }
-    
-    .social-share-section, .engagement-section {
-        padding: 1rem;
+
+    .no-comments {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #7f8c8d;
     }
-    
-    .engagement-btn {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
+
+    .no-comments-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
     }
-    
-    .navigation-buttons {
+
+    .no-comments h4 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+        font-size: 1.2rem;
+    }
+
+    .no-comments p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .comment-item {
+        padding: 1.5rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+
+    .comment-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .author-avatar {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+
+    .author-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-initials {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e67e22;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    .author-details {
+        display: flex;
         flex-direction: column;
     }
-    
-    .nav-btn {
-        width: 100%;
+
+    .author-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.95rem;
     }
-}
+
+    .comment-date {
+        color: #7f8c8d;
+        font-size: 0.8rem;
+    }
+
+    .comment-content {
+        color: #2c3e50;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        font-size: 0.95rem;
+    }
 
     /* Footer */
     .footer-section {
@@ -1468,42 +1354,38 @@ export default function BlogDetail() {
             border-top: 1px solid #e9ecef;
         }
 
-        .engagement-section {
+        .social-share-buttons {
+            gap: 0.5rem;
+        }
+        
+        .social-share-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
+        }
+        
+        .engagement-buttons {
             flex-direction: column;
-            align-items: stretch;
-            gap: 1.5rem;
-        }
-        
-        .engagement-stats {
-            justify-content: space-around;
-            gap: 1rem;
-        }
-        
-        .engagement-actions {
+            width: 100%;
+            max-width: 200px;
             justify-content: center;
             flex-wrap: wrap;
         }
         
-        .action-btn {
+        .engagement-btn {
             flex: 1;
-            min-width: 100px;
+            min-width: 140px;
             justify-content: center;
         }
         
-        .article-navigation {
-            flex-direction: column;
-            text-align: center;
-            gap: 1rem;
+        .navigation-buttons {
+            justify-content: center;
         }
         
         .nav-btn {
-            width: 100%;
+            flex: 1;
             justify-content: center;
-        }
-        
-        .social-links {
-            flex-direction: column;
-            gap: 0.75rem;
+            min-width: 140px;
         }
         
         .comments-section {
@@ -1513,11 +1395,12 @@ export default function BlogDetail() {
         
         .comment-form-actions {
             flex-direction: column;
+            gap: 1rem;
             align-items: stretch;
         }
         
-        .form-buttons {
-            justify-content: space-between;
+        .submit-comment-btn {
+            width: 100%;
         }
 
         .footer-blocks {
@@ -1543,28 +1426,32 @@ export default function BlogDetail() {
         .article-footer {
             margin-top: 2rem;
             padding-top: 1.5rem;
-        }
-
-        .engagement-stats {
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 1.5rem;
         }
         
-        .engagement-actions {
+        .social-share-section, .engagement-section {
+            padding: 1rem;
+        }
+        
+        .engagement-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .navigation-buttons {
             flex-direction: column;
         }
         
-        .action-btn {
+        .nav-btn {
             width: 100%;
         }
         
-        .share-menu {
-            right: -50px;
-            left: -50px;
-        }
-
         .comments-section {
             padding: 1rem;
+        }
+        
+        .comments-header h3 {
+            font-size: 1.3rem;
         }
 
         .action-btn, .nav-btn {
@@ -1637,32 +1524,6 @@ export default function BlogDetail() {
             display: none;
         }
     }
-
-    @media (max-width: 768px) {
-    /* Change this: */
-    .engagement-actions {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .action-btn {
-        flex: 1;
-        min-width: 100px;
-        justify-content: center;
-    }
-    
-    /* To this: */
-    .engagement-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .engagement-btn {
-        flex: 1;
-        min-width: 140px;
-        justify-content: center;
-    }
-}
 `}</style>
         </div>
     );
