@@ -156,58 +156,63 @@ export default function BlogDetail() {
     return (
         <div className="blog-detail-page">
             {/* Navigation */}
-<div className="nav-bar" style={{ display: 'flex', flexDirection: 'row', textAlign: 'center' }}>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20%"
-    height="100%"
-    viewBox="0 0 150 50"
-    preserveAspectRatio="xMidYMid meet"
-  >
-    <defs>
-      <style type="text/css">{`
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
-      `}</style>
-    </defs>
-    <text
-      x="39"
-      y="19"
-      style={{
-        fontFamily: "'Great Vibes', cursive",
-        fontSize: "0.75rem", /* 12px → rem */
-        fontWeight: '850',
-        fill: "#2c3e50"
-      }}
+{/* Dim background when menu is open */}
+{menuOpen && <div className="menu-dim" onClick={() => setMenuOpen(false)}></div>}
+
+<div className="nav-bar">
+  <div className="nav-brand">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="150"
+      height="50"
+      viewBox="0 0 150 50"
+      preserveAspectRatio="xMidYMid meet"
     >
-      The
-    </text>
-    <text
-      x="10"
-      y="36"
-      style={{
-        fontFamily: "'Great Vibes', cursive",
-        fontSize: "1.6875rem", /* 27px → rem */
-        fontWeight: '650',
-        fill: "#e67e22",
-        letterSpacing: '0.09375rem' /* 1.5px → rem */
-      }}
-    >
-      Seekers
-    </text>
-    <text
-      x="29"
-      y="46"
-      style={{
-        fontFamily: "'Fraunces', serif",
-        fontSize: "0.75rem", /* 12px → rem */
-        fontWeight: '850',
-        fill: "#2c3e50"
-      }}
-    >
-      ministry
-    </text>
-  </svg>
+      <defs>
+        <style type="text/css">{`
+          @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
+        `}</style>
+      </defs>
+      <text
+        x="39"
+        y="19"
+        style={{
+          fontFamily: "'Great Vibes', cursive",
+          fontSize: "0.75rem",
+          fontWeight: '850',
+          fill: "#2c3e50"
+        }}
+      >
+        The
+      </text>
+      <text
+        x="10"
+        y="36"
+        style={{
+          fontFamily: "'Great Vibes', cursive",
+          fontSize: "1.6875rem",
+          fontWeight: '650',
+          fill: "#e67e22",
+          letterSpacing: '0.09375rem'
+        }}
+      >
+        Seekers
+      </text>
+      <text
+        x="29"
+        y="46"
+        style={{
+          fontFamily: "'Fraunces', serif",
+          fontSize: "0.75rem",
+          fontWeight: '850',
+          fill: "#2c3e50"
+        }}
+      >
+        ministry
+      </text>
+    </svg>
+  </div>
 
   {/* Hamburger icon */}
   <button
@@ -624,29 +629,124 @@ export default function BlogDetail() {
     }
 
     /* Navigation */
+
     .nav-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background: white;
-        border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+    }
+
+    .nav-brand {
+    flex-shrink: 0;
     }
 
     .desktop-nav {
-        display: flex;
-        gap: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
     }
 
     .nav-item {
-        color: #2c3e50;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.5rem 0;
     }
 
     .nav-item:hover {
-        color: #e67e22;
+    color: #e67e22;
+    }
+
+    .nav-item.active {
+    color: #e67e22;
+    font-weight: 600;
+    }
+
+    /* Mobile Menu Styles */
+    .menu-dim {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    }
+
+    .menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    gap: 0.25rem;
+    z-index: 1000;
+    }
+
+    .menu-bar {
+    width: 25px;
+    height: 3px;
+    background: #2c3e50;
+    transition: all 0.3s ease;
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(2) {
+    opacity: 0;
+    }
+
+    .menu-toggle.open .menu-bar:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 999;
+    }
+
+    .nav-links.show {
+    display: flex;
+    }
+
+    .nav-links .nav-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f8f9fa;
+    }
+
+    .nav-links .nav-item:last-child {
+    border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .desktop-nav {
+        display: none;
+    }
+    
+    .nav-bar {
+        padding: 1rem;
+    }
     }
 
     /* Blog Content */
