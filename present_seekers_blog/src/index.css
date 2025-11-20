@@ -980,12 +980,14 @@
 
 .category-cards{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
     padding: 3rem 1rem;
     max-width: 1200px;
     margin: 0 auto;
     justify-items: center;
+    width: 100%;
+    box-sizing: border-box;
 
 }
 
@@ -993,6 +995,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 400px;
     border: 1px solid #e9ecef;
     border-radius: 12px;
     height: 100%;
@@ -1000,6 +1003,7 @@
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     background: white;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin: 0 auto;
 }
 
 .card1:hover {
@@ -2279,6 +2283,8 @@
     font-size: 1rem;
     max-width: 600px;
 }
+
+.category-cards
 
 .author-meta {
     display: flex;
