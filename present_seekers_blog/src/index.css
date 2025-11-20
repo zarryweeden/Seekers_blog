@@ -1234,7 +1234,7 @@
     position: relative;
     overflow: hidden;
 }
-
+.blog-detail-container
 .section-story::before {
     content: "";
     position: absolute;
@@ -2107,7 +2107,7 @@
     background: white;
     box-shadow: 0 10px 50px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
-    margin-top: 6rem;
+    margin-top: 10rem;
     margin-bottom: 3rem;
     overflow: hidden;
 }
