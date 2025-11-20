@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  position: static;
+  position: fixed;
   text-align: center;
   z-index: 1000;
   width: 100%;
