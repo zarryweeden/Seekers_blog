@@ -240,7 +240,7 @@ export default function BlogDetail() {
 </div>
 
             {/* Blog Content */}
-            <article className="blog-detail-container" style={{marginTop:'7rem'}}>
+            <article className="blog-detail-container" style={{marginTop:'4rem'}}>
                 {/* Breadcrumb Navigation */}
                 <nav className="blog-breadcrumb">
                     <button onClick={() => navigate('/blogs')} className="breadcrumb-link">
