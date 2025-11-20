@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  position: relative;
+  position: static;
   text-align: center;
   z-index: 1000;
   width: 100%;
@@ -1625,6 +1625,7 @@
     line-height: 1.6;
     font-weight: 400;
 }
+
 
 .beliefs-grid {
     display: grid;
