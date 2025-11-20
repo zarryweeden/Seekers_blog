@@ -96,7 +96,7 @@ export default function CategoryArticles() {
             </div>
 
             {/* Category Hero Section */}
-            <section className="category-hero-section">
+            <section className="category-hero-section" style={{marginTop:'2.2rem'}}>
                 <div className="container">
                     <button 
                         className="back-button"
