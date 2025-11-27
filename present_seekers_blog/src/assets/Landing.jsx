@@ -25,7 +25,7 @@ export default function Landing(){
               const response = await blogAPI.getFeaturedPosts(); 
               setFeaturedPosts(response.data);
             
-            setFeaturedPosts(featured);
+           
         } catch (error) {
             console.error('Error fetching featured posts:', error);
         } finally {
