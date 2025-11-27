@@ -110,7 +110,7 @@ export default function About() {
 <div 
         className="about-hero"
         style={{
-          backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.6), rgba(17, 24, 39, 0.6)), url(${aboutus})`
+          backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.6), rgba(17, 24, 39, 0.6)), url(${aboutus})`,marginTop:'1rem'
         }}
       >
         <div className="hero-overlay">
