@@ -40,3 +40,8 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 
+class HeroSectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'active', 'order', 'created_at']
+    list_editable = ['active', 'order']
+    list_filter = ['active', 'created_at']
+    search_fields = ['title', 'description']
