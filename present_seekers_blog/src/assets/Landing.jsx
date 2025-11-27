@@ -13,11 +13,11 @@ export default function Landing(){
         useEffect(() => {
         fetchFeaturedPosts();
     }, []);
-    const devotionalButton = document.getElementById('devotionalButton')
+  
 
-    devotionalButton.addEventListener('click',function(){
+    const handleButtonClick = ()=>{
       window.location.href="https://whiteestate.org/devotional/mlt/"
-    })
+    };
 
     const fetchFeaturedPosts = async () => {
         try {
@@ -154,7 +154,7 @@ export default function Landing(){
       every failure of humanity to reach His ideal, brings grief to Him."
     </p>
 
-    <button className="read-more-btn" id="devotionalButton">Read Full Devotion</button>
+    <button className="read-more-btn" onClick={handleButtonClick}>Read Full Devotion</button>
   </div>
   
   <div className="hero-image-container">
