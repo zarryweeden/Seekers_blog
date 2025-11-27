@@ -108,3 +108,21 @@ class BlogPostDetailSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         comments = obj.comment_set.all().order_by('-created_at')
         return CommentSerializer(comments, many=True).data
+    
+
+
+class HeroSectionSerializer(serializers.ModelSerializer):
+    background_image_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = HeroSection
+        fields = [
+            'id', 'title', 'subtitle', 'description', 
+            'bible_verse', 'button_text', 'button_link',
+            'background_image_url', 'active', 'order'
+        ]
+    
+    def get_background_image_url(self, obj):
+        if obj.background_image:
+            return obj.background_image.url
+        return None

@@ -90,3 +90,29 @@ class Comment(models.Model):
     
     def __str__(self):
         return f"Comment by {self.user.username} on {self.post.title}"
+
+
+
+class HeroSection(models.Model):
+    title = models.TextField(help_text="Main headline text")
+    subtitle = models.CharField(max_length=200, blank=True, help_text="Subtitle or Bible verse reference")
+    description = models.TextField(help_text="Quote or descriptive text")
+    bible_verse = models.TextField(blank=True, help_text="Full Bible verse text")
+    button_text = models.CharField(max_length=50, default="Read Full Devotion")
+    button_link = models.URLField(default="https://whiteestate.org/devotional/mlt/")
+    background_image = models.ImageField(
+        upload_to='hero/',
+        blank=True,
+        null=True,
+        storage=MediaCloudinaryStorage()
+    )
+    active = models.BooleanField(default=True, help_text="Whether this hero section is currently active")
+    order = models.IntegerField(default=0, help_text="Display order if multiple hero sections exist")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order', '-created_at']
+    
+    def __str__(self):
+        return f"Hero Section - {self.title[:50]}..."

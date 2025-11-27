@@ -23,6 +23,7 @@ export const blogAPI = {
   getPostsByCategory: (category) => api.get(`/posts/?category=${category}`),
   getPost: (id) => api.get(`/posts/${id}/`),
   getCategories: () => api.get('/categories/'),
+  getHeroSection: () => axios.get('/api/hero-section/'),
   getFeaturedPosts: () => api.get('/posts/featured/'),
   incrementViews: (id) => api.post(`/posts/${id}/increment_views/`),
   toggleLike: (postId) => api.post(`/posts/${postId}/toggle_like/`),

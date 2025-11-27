@@ -10,6 +10,10 @@ from rest_framework.decorators import api_view, permission_classes
 from .models import Like, Comment
 from .serializers import CommentSerializer
 from django.contrib.auth.models import User 
+from rest_framework import generics
+from .models import HeroSection
+from .serializers import HeroSectionSerializer
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -170,4 +174,11 @@ def test_image_upload(request):
     })
 
 
+
+class HeroSectionView(generics.RetrieveAPIView):
+    serializer_class = HeroSectionSerializer
+    
+    def get_object(self):
+        # Get the active hero section with highest order
+        return HeroSection.objects.filter(active=True).order_by('-order', '-created_at').first()
 

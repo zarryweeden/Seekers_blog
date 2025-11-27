@@ -8,15 +8,43 @@ export default function Landing(){
     const isActive = (path)=>location.pathname ===path;
     const [menuOpen, setMenuOpen] = useState(false);
     const [featuredPosts, setFeaturedPosts] = useState([]);
+    const [heroData, setHeroData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [heroLoading, setHeroLoading] = useState(true);
     const MAX_FEATURED_POSTS = 3;
-        useEffect(() => {
+    
+    useEffect(() => {
         fetchFeaturedPosts();
+        fetchHeroSection();
     }, []);
-  
+
+    const fetchHeroSection = async () => {
+        try {
+            setHeroLoading(true);
+            const response = await blogAPI.getHeroSection();
+            setHeroData(response.data);
+        } catch (error) {
+            console.error('Error fetching hero section:', error);
+            // Fallback to default data
+            setHeroData({
+                title: "But God demonstrates his own love for us in this: While we were still sinners, <span>Christ died for us.</span>",
+                subtitle: "Romans 5:8",
+                description: '"The cross is a revelation to our dull senses of the pain that, from its very inception, sin has brought to the heart of God. Every departure from the right, every deed of cruelty, every failure of humanity to reach His ideal, brings grief to Him."',
+                button_text: "Read Full Devotion",
+                button_link: "https://whiteestate.org/devotional/mlt/",
+                background_image_url: "/images/Genesis 13.jpeg"
+            });
+        } finally {
+            setHeroLoading(false);
+        }
+    };
 
     const handleButtonClick = ()=>{
-      window.location.href="https://whiteestate.org/devotional/mlt/"
+        if (heroData?.button_link) {
+            window.location.href = heroData.button_link;
+        } else {
+            window.location.href = "https://whiteestate.org/devotional/mlt/";
+        }
     };
 
     const fetchFeaturedPosts = async () => {
@@ -24,8 +52,6 @@ export default function Landing(){
             setLoading(true);
               const response = await blogAPI.getFeaturedPosts(); 
               setFeaturedPosts(response.data);
-            
-           
         } catch (error) {
             console.error('Error fetching featured posts:', error);
         } finally {
@@ -40,7 +66,71 @@ export default function Landing(){
         });
     };
 
+    // Render hero section with dynamic data
+    const renderHeroSection = () => {
+        if (heroLoading) {
+            return (
+                <div className="hero-section">
+                    <div className="hero-section-text">
+                        <div className="loading-container">
+                            <div className="loading-spinner"></div>
+                            <p>Loading devotional...</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
 
+        const defaultHero = {
+            title: "But God demonstrates his own love for us in this: While we were still sinners, <span>Christ died for us.</span>",
+            subtitle: "Romans 5:8",
+            description: '"The cross is a revelation to our dull senses of the pain that, from its very inception, sin has brought to the heart of God. Every departure from the right, every deed of cruelty, every failure of humanity to reach His ideal, brings grief to Him."',
+            button_text: "Read Full Devotion",
+            background_image_url: "/images/Genesis 13.jpeg"
+        };
+
+        const data = heroData || defaultHero;
+
+        return (
+            <div className="hero-section">
+                <div className="hero-section-text">
+                    <div className="devotional-date">
+                        <h3>Daily Devotional</h3>
+                        <p className="date">
+                            {new Date().toLocaleDateString('en-US', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                        </p>
+                    </div>
+
+                    <div className="hero-section-text-header">
+                        <h1 dangerouslySetInnerHTML={{ __html: data.title }} />
+                        <h6>{data.subtitle}</h6>
+                    </div>
+                    
+                    <p>{data.description}</p>
+
+                    <button className="read-more-btn" onClick={handleButtonClick}>
+                        {data.button_text || "Read Full Devotion"}
+                    </button>
+                </div>
+                
+                <div className="hero-image-container">
+                    <img 
+                        src={data.background_image_url || "/images/Genesis 13.jpeg"} 
+                        alt="Daily Devotional" 
+                        className="hero-image"
+                        onError={(e) => {
+                            e.target.src = "/images/Genesis 13.jpeg";
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    };
 
     return(
     <div style={{minHeight:'80vh'}}>
@@ -126,45 +216,8 @@ export default function Landing(){
   </div>
 </div>
 
-<div className="hero-section">
-  <div className="hero-section-text">
-    <div className="devotional-date">
-      <h3>Daily Devotional</h3>
-      <p className="date">
-        {new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
-      </p>
-    </div>
-
-    <div className="hero-section-text-header">
-      <h1>
-        But God demonstrates his own love for us in this: While we were still sinners, 
-        <span> Christ died for us.</span>
-      </h1>
-      <h6>Romans 5:8</h6>
-    </div>
-    
-    <p>
-      "The cross is a revelation to our dull senses of the pain that, from its very inception, 
-      sin has brought to the heart of God. Every departure from the right, every deed of cruelty, 
-      every failure of humanity to reach His ideal, brings grief to Him."
-    </p>
-
-    <button className="read-more-btn" onClick={handleButtonClick}>Read Full Devotion</button>
-  </div>
-  
-  <div className="hero-image-container">
-    <img 
-      src="/images/Genesis 13.jpeg" 
-      alt="Daily Devotional" 
-      className="hero-image"
-    />
-  </div>
-</div>
+{/* Dynamic Hero Section - This replaces the static one */}
+{renderHeroSection()}
 
             <div className="pop-blogs-section">
                 <div className="pop-blogs-section-header">
