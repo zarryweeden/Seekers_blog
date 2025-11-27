@@ -210,7 +210,6 @@
 .hero-section {
   background-color: #241c15;
   min-height: 80vh;
-  margin-top: 6.7rem; 
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
