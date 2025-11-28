@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Author, BlogPost
+from .models import *
 from django import forms
 
 
@@ -39,7 +39,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 
-
+@admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
     list_display = ['title', 'active', 'order', 'created_at']
     list_editable = ['active', 'order']

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import HeroSectionView
+
 
 router = DefaultRouter()
 router.register(r'posts', views.BlogPostViewSet, basename='posts')
@@ -11,6 +11,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('test-image-upload/', views.test_image_upload, name='test-image-upload'),
     path('posts/<int:post_id>/comments/', views.post_comments, name='post-comments'),
-    path('api/hero-section/', HeroSectionView.as_view(), name='hero-section'),
+
     
 ]
