@@ -150,7 +150,7 @@ export default function Blogs(){
             </div>
 
             {/* STEP 1: Top Category Navigation */}
-            <div className="categories" style={{marginTop:'3rem'}}>
+            <div className="categories" style={{marginTop:'6.9rem'}}>
                 <ul className="categories-navigation">
                     <li 
                         className={`categories-navigation-li ${!selectedCategory ? 'active' : ''}`}
